@@ -27,38 +27,38 @@ public class Flight {
     }
 
     // EFFECTS: returns flight number
-    public int getFlightNum() {
-        return 0;
+    public String getFlightNum() {
+        return flightNum;
     }
 
     // EFFECTS: returns destination of flight
     public String getDestination() {
-        return "";
+        return destination;
     }
 
     // EFFECTS: returns duration of flight
-    public int getDuration() {
-        return 0;
+    public double getDuration() {
+        return duration;
     }
 
     // EFFECTS: returns date of departure
-    public int getDate() {
-        return 0;
+    public LocalDate getDate() {
+        return date;
     }
 
     // EFFECTS: returns cost of flight one-way
     public int getCost() {
-        return 0;
+        return cost;
     }
 
     // EFFECTS: returns price range of flight (HIGH, GOOD, LOW) depending on season;
     public String getPriceRange() {
-        return "";
+        return priceRange;
     }
 
     // EFFECTS: returns max seat capacity on flight
     public int getMaxSeats() {
-        return 0;
+        return maxSeats;
     }
 
 

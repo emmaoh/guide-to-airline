@@ -12,20 +12,27 @@ public class ListOfFlights {
     }
 
     public void addFlight(Flight f) {
-
+        if (!containsFlight(f.getFlightNum())) {
+            allFlights.add((f));
+        }
     }
 
     public void removeFlight(Flight f) {
-
+        allFlights.remove(f);
     }
 
     public boolean containsFlight(String flightNum) {
+        for (Flight nextFlight : allFlights) {
+            if (nextFlight.getFlightNum().equals(flightNum)) {
+                return true;
+            }
+        }
         return false;
     }
 
 
     public int size() {
-        return 0;
+        return allFlights.size();
     }
 
     public Flight searchFlight(Flight f) {
