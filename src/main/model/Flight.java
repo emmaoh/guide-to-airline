@@ -18,8 +18,8 @@ public class Flight {
 
     // REQUIRES: flightNum ...
     // EFFECTS: flight has given flight number, destination, duration and date
-    public Flight
-    (String name, String flightNum, String destination, double duration, LocalDate date, String time, int cost) {
+    public Flight(String name, String flightNum, String destination, double duration,
+                  LocalDate date, String time, int cost) {
         this.name = name;
         this.flightNum = flightNum;
         this.destination = destination;
@@ -31,7 +31,9 @@ public class Flight {
     }
 
     // EFFECTS: returns name of plane
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     // EFFECTS: returns flight number
     public String getFlightNum() {
