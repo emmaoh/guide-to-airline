@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 // Represents a flight with a given flight number, destination, duration, date, cost, price range and seats available
 public class Flight {
+    private String name;           // name of specific flight (plane)
     private String flightNum;      // the plane number in 6 digits
     private String destination;    // arrival destination of flight
     private double duration;          // hours taken to arrival
@@ -17,14 +18,20 @@ public class Flight {
 
     // REQUIRES: flightNum ...
     // EFFECTS: flight has given flight number, destination, duration and date
-    public Flight(String flightNum, String destination, double duration, LocalDate date, String time) {
+    public Flight
+    (String name, String flightNum, String destination, double duration, LocalDate date, String time, int cost) {
+        this.name = name;
         this.flightNum = flightNum;
         this.destination = destination;
         this.duration = duration;
         this.date = date;
         this.time = time;
+        this.cost = cost;
         airport = "YVR";
     }
+
+    // EFFECTS: returns name of plane
+    public String getName() { return name; }
 
     // EFFECTS: returns flight number
     public String getFlightNum() {
@@ -60,6 +67,9 @@ public class Flight {
     public int getMaxSeats() {
         return maxSeats;
     }
+
+
+
 
 
 

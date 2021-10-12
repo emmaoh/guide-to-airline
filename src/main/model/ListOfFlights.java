@@ -18,7 +18,9 @@ public class ListOfFlights {
     }
 
     public void removeFlight(Flight f) {
-        allFlights.remove(f);
+        if (containsFlight(f.getFlightNum())) {
+            allFlights.remove(f);
+        }
     }
 
     public boolean containsFlight(String flightNum) {
@@ -35,11 +37,30 @@ public class ListOfFlights {
         return allFlights.size();
     }
 
-    public Flight searchFlight(Flight f) {
-        return null;
+    public String searchFlight(Flight f) {
+        if (containsDestination(f.getDestination())) {
+            return f.getName();
+        }
+        return f.getName();
     }
 
-    public Flight viewFlight(Flight f) {
-        return null;
+    public boolean containsDestination(String destination) {
+        for (Flight nextFlight : allFlights) {
+            if (nextFlight.getDestination().equals(destination)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    public boolean containsName(String name) {
+        for (Flight nextFlight : allFlights) {
+            if (nextFlight.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
