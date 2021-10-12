@@ -81,12 +81,40 @@ class FlightsTest {
 
     @Test
     public void testSearchFlight() {
+        ListOfFlights sampleDestinationLOF = new ListOfFlights();
         assertFalse(sampleLOF.containsDestination("JFK"));
         sampleLOF.addFlight(testFlight1);
+        sampleLOF.addFlight(testFlight2);
+        sampleLOF.addFlight(testFlight3);
+        sampleLOF.addFlight(testFlight4);
+        sampleLOF.addFlight(testFlight5);
+        assertEquals(5, sampleLOF.size());
         assertTrue(sampleLOF.containsDestination("JFK"));
-        assertEquals("TestFlight1", testFlight1.getName());
-        assertFalse(sampleLOF.containsDestination("ICN"));
+        sampleDestinationLOF.addFlight(testFlight1);
+        sampleDestinationLOF.addFlight(testFlight5);
+        assertEquals(2, sampleDestinationLOF.size());
 
+    }
+
+    @Test
+    public void testContainsDestination() {
+        assertFalse(sampleLOF.containsDestination("YYC"));
+        sampleLOF.addFlight(testFlight3);
+        assertEquals(1, sampleLOF.size());
+        assertTrue(sampleLOF.containsDestination("YYC"));
+        assertFalse(sampleLOF.containsDestination("HNL"));
+    }
+
+    @Test
+    public void testContainsName() {
+        assertFalse(sampleLOF.containsName("TestFlight5"));
+        sampleLOF.addFlight(testFlight5);
+        assertEquals(1, sampleLOF.size());
+        assertTrue(sampleLOF.containsName("TestFlight5"));
+        assertFalse(sampleLOF.containsName("TestFlight1"));
+        sampleLOF.addFlight(testFlight1);
+        assertEquals(2, sampleLOF.size());
+        assertTrue(sampleLOF.containsName("TestFlight1"));
     }
 
 

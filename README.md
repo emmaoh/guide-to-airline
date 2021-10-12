@@ -31,7 +31,6 @@ project was seemingly of perfect fit. </p>
 
 1. As a user, I want to be able to add a flight for the specific airline to a list of flights for the year 2022. 
 
-
 2.  As a user, I want to be able to search a flight given by its destination  (to and from), as well as with the time 
 frame, meaning the month or date. 
 
