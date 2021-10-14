@@ -11,18 +11,21 @@ public class ListOfFlights {
         allFlights = new ArrayList<>();
     }
 
+    // EFFECTS: adds a new flight into list of scheduled flights, if it doesn't exist in the list already
     public void addFlight(Flight f) {
         if (!containsFlight(f.getFlightNum())) {
             allFlights.add((f));
         }
     }
 
+    // EFFECTS: removes flight from list of scheduled flights if it exists in the list already
     public void removeFlight(Flight f) {
         if (containsFlight(f.getFlightNum())) {
             allFlights.remove(f);
         }
     }
 
+    // EFFECTS: returns true if flight exists in list, false otherwise. (checks by specific flight number)
     public boolean containsFlight(String flightNum) {
         for (Flight nextFlight : allFlights) {
             if (nextFlight.getFlightNum().equals(flightNum)) {
@@ -33,42 +36,33 @@ public class ListOfFlights {
     }
 
 
+    // EFFECTS: returns the number of flights in list of scheduled flights
     public int size() {
         return allFlights.size();
     }
 
-    public ListOfFlights searchFlight(Flight f) {
+    // EFFECTS: returns new list of flights that are available with same destination
+    public ListOfFlights searchFlight(String destination) {
         ListOfFlights destinationList = new ListOfFlights();
         for (Flight nextFlight : allFlights) {
-            if (containsDestination(f.getDestination())) {
+            if ((nextFlight.getDestination().equals(destination))) {
                 destinationList.addFlight(nextFlight);
             }
         }
         return destinationList;
     }
 
-    public boolean containsDestination(String destination) {
-        for (Flight nextFlight : allFlights) {
-            if (nextFlight.getDestination().equals(destination)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    public Flight viewFlight(Flight f) {
-        if (containsName(f.getName())) {
-            return f;
-        }
-        return f;
-    }
 
-    public boolean containsName(String name) {
+
+
+    // EFFECTS: returns flight with given name, null otherwise
+    public Flight containsName(String name) {
         for (Flight nextFlight : allFlights) {
             if (nextFlight.getName().equals(name)) {
-                return true;
+                return nextFlight;
             }
         }
-        return false;
+        return null;
     }
 }

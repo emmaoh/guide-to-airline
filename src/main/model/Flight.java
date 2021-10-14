@@ -19,14 +19,14 @@ public class Flight {
     // REQUIRES: flightNum ...
     // EFFECTS: flight has given flight number, destination, duration and date
     public Flight(String name, String flightNum, String destination, double duration,
-                  LocalDate date, String time, int cost) {
+                  LocalDate date, String time, int maxSeats) {
         this.name = name;
         this.flightNum = flightNum;
         this.destination = destination;
         this.duration = duration;
         this.date = date;
         this.time = time;
-        this.cost = cost;
+        this.maxSeats = maxSeats;
         airport = "YVR";
     }
 
@@ -55,14 +55,8 @@ public class Flight {
         return date;
     }
 
-    // EFFECTS: returns cost of flight one-way
-    public int getCost() {
-        return cost;
-    }
-
-    // EFFECTS: returns price range of flight (HIGH, GOOD, LOW) depending on season;
-    public String getPriceRange() {
-        return priceRange;
+    public String getTime() {
+        return time;
     }
 
     // EFFECTS: returns max seat capacity on flight

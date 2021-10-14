@@ -31,14 +31,13 @@ project was seemingly of perfect fit. </p>
 
 1. As a user, I want to be able to add a flight for the specific airline to a list of flights for the year 2022. 
 
-2.  As a user, I want to be able to search a flight given by its destination  (to and from), as well as with the time 
-frame, meaning the month or date. 
+2.  As a user, I want to be able to search a flights available from given destination that is of interest.
 
 3.  As a user, I want to be able to delete a flight from the list of scheduled flights. 
 
 4. As a user, I want to be able to view the list of flights that are available within the time frame. 
 
-5.  As a user, I want to be able to select a flight and view all the details of that specific flight. 
+5.  As a user, I want to be able to select a flight by its given name and view all the details of that specific flight. 
 
 
 

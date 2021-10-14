@@ -2,9 +2,11 @@ package model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sun.jvm.hotspot.utilities.Assert;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,15 +24,15 @@ class FlightsTest {
     public void setUp() {
         sampleLOF = new ListOfFlights();
         testFlight1 = new Flight("TestFlight1", "111EOK", "JFK", 6,
-                LocalDate.of(2022, Month.APRIL, 5), "0800", 650);
+                LocalDate.of(2022, Month.APRIL, 5), "0800", 135);
         testFlight2 = new Flight("TestFlight2", "124LYZ", "ICN", 11,
-                LocalDate.of(2022, Month.JANUARY, 20), "1430", 1100);
+                LocalDate.of(2022, Month.JANUARY, 20), "1430", 178);
         testFlight3 = new Flight("TestFlight3", "352TTT", "YYC", 1.5,
-                LocalDate.of(2022, Month.SEPTEMBER, 28), "0200", 220);
+                LocalDate.of(2022, Month.SEPTEMBER, 28), "0200", 110);
         testFlight4 = new Flight("TestFlight4", "444UIC", "HNL", 6,
-                LocalDate.of(2022, Month.AUGUST, 1), "2400", 670);
+                LocalDate.of(2022, Month.AUGUST, 1), "2400", 140);
         testFlight5 = new Flight("TestFlight5", "986QCC", "JFK", 6,
-                LocalDate.of(2022, Month.JULY, 16), "1100", 700);
+                LocalDate.of(2022, Month.JULY, 16), "1100", 137);
     }
 
     @Test
@@ -81,42 +83,23 @@ class FlightsTest {
 
     @Test
     public void testSearchFlight() {
-        ListOfFlights sampleDestinationLOF = new ListOfFlights();
-        assertFalse(sampleLOF.containsDestination("JFK"));
         sampleLOF.addFlight(testFlight1);
         sampleLOF.addFlight(testFlight2);
         sampleLOF.addFlight(testFlight3);
         sampleLOF.addFlight(testFlight4);
         sampleLOF.addFlight(testFlight5);
         assertEquals(5, sampleLOF.size());
-        assertTrue(sampleLOF.containsDestination("JFK"));
-        sampleDestinationLOF.addFlight(testFlight1);
-        sampleDestinationLOF.addFlight(testFlight5);
-        assertEquals(2, sampleDestinationLOF.size());
+        assertEquals(2, sampleLOF.searchFlight("JFK").size());
 
     }
 
-    @Test
-    public void testContainsDestination() {
-        assertFalse(sampleLOF.containsDestination("YYC"));
-        sampleLOF.addFlight(testFlight3);
-        assertEquals(1, sampleLOF.size());
-        assertTrue(sampleLOF.containsDestination("YYC"));
-        assertFalse(sampleLOF.containsDestination("HNL"));
-    }
 
     @Test
     public void testContainsName() {
-        assertFalse(sampleLOF.containsName("TestFlight5"));
-        sampleLOF.addFlight(testFlight5);
-        assertEquals(1, sampleLOF.size());
-        assertTrue(sampleLOF.containsName("TestFlight5"));
-        assertFalse(sampleLOF.containsName("TestFlight1"));
+        assertEquals(null, sampleLOF.containsName("TestFlight1"));
         sampleLOF.addFlight(testFlight1);
-        assertEquals(2, sampleLOF.size());
-        assertTrue(sampleLOF.containsName("TestFlight1"));
+        assertEquals(testFlight1, sampleLOF.containsName("TestFlight1"));
     }
-
 
 
 
