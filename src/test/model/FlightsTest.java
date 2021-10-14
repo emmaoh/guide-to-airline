@@ -10,8 +10,7 @@ import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// flights with same number ...?
-// duplicates ...?
+
 class FlightsTest {
     private ListOfFlights sampleLOF;
     private Flight testFlight1;

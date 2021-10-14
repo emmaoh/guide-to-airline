@@ -45,24 +45,9 @@ public class Flight {
         return destination;
     }
 
-    // EFFECTS: returns duration of flight
-    public double getDuration() {
-        return duration;
-    }
 
-    // EFFECTS: returns date of departure
-    public LocalDate getDate() {
-        return date;
-    }
 
-    public String getTime() {
-        return time;
-    }
 
-    // EFFECTS: returns max seat capacity on flight
-    public int getMaxSeats() {
-        return maxSeats;
-    }
 
 
 
