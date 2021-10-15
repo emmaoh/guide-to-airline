@@ -55,9 +55,8 @@ public class ListOfFlights {
 
 
 
-
     // EFFECTS: returns flight with given name, null otherwise
-    public Flight containsName(String name) {
+    public Flight viewFlight(String name) {
         for (Flight nextFlight : allFlights) {
             if (nextFlight.getName().equals(name)) {
                 return nextFlight;

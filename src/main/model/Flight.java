@@ -1,6 +1,9 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 // Represents a flight with a given flight number, destination, duration, date, cost, price range and seats available
 public class Flight {
@@ -45,7 +48,38 @@ public class Flight {
         return destination;
     }
 
+    public double getDuration() {
+        return duration;
+    }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public int getMaxSeats() {
+        return maxSeats;
+    }
+
+
+    public String durationToString(double duration) {
+        String durationString = String.format("%1$,.2f", duration);
+        return durationString;
+    }
+
+    public String dateToString(LocalDate date) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+        String dateString = date.format(dateFormatter);
+        return dateString;
+    }
+
+    public String seatToString(int maxSeats) {
+        String seatString = String.format("%d", maxSeats);
+        return seatString;
+    }
 
 
 

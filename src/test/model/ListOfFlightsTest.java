@@ -11,7 +11,7 @@ import java.time.Month;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class FlightsTest {
+class ListOfFlightsTest {
     private ListOfFlights sampleLOF;
     private Flight testFlight1;
     private Flight testFlight2;
@@ -43,7 +43,7 @@ class FlightsTest {
     public void testAddFlight() {
         assertEquals(0, sampleLOF.size());
         sampleLOF.addFlight(testFlight1);
-        assertTrue(sampleLOF.containsFlight("111EOK"));
+        assertTrue(sampleLOF.containsFlight(testFlight1.getFlightNum()));
         assertEquals(1, sampleLOF.size());
         sampleLOF.addFlight(testFlight1);
         assertEquals(1, sampleLOF.size());
@@ -54,7 +54,7 @@ class FlightsTest {
         sampleLOF.addFlight(testFlight1);
         sampleLOF.addFlight(testFlight2);
         sampleLOF.removeFlight(testFlight1);
-        assertFalse(sampleLOF.containsFlight("111EOK"));
+        assertFalse(sampleLOF.containsFlight(testFlight1.getFlightNum()));
         assertEquals(1, sampleLOF.size());
         sampleLOF.removeFlight(testFlight3);
         assertEquals(1, sampleLOF.size());
@@ -94,10 +94,26 @@ class FlightsTest {
 
 
     @Test
-    public void testContainsName() {
-        assertEquals(null, sampleLOF.containsName("TestFlight1"));
+    public void testViewFlight() {
+        assertEquals(null, sampleLOF.viewFlight("TestFlight1"));
         sampleLOF.addFlight(testFlight1);
-        assertEquals(testFlight1, sampleLOF.containsName("TestFlight1"));
+        assertEquals(testFlight1, sampleLOF.viewFlight("TestFlight1"));
+    }
+
+    @Test
+    public void testDurationToString() {
+        assertEquals("6.00", testFlight1.durationToString(testFlight1.getDuration()));
+    }
+
+    @Test
+    public void testDateToString() {
+        assertEquals("2022-Apr-05", testFlight1.dateToString(testFlight1.getDate()));
+        assertEquals("2022-Jan-20", testFlight2.dateToString(testFlight2.getDate()));
+    }
+
+    @Test
+    public void testSeatToString() {
+        assertEquals("135", testFlight1.seatToString(testFlight1.getMaxSeats()));
     }
 
 
