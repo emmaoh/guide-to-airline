@@ -3,12 +3,6 @@ package ui;
 import model.Flight;
 import model.ListOfFlights;
 
-
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 // This [AirlineApp] references code from [CPSC210] repository
@@ -16,19 +10,8 @@ import java.util.Scanner;
 
 // Airline Schedule Guide Application
 public class AirlineApp {
-    private Flight jfkFlight0105;
-    private Flight icnFlight0310;
-    private Flight yycFlight0428;
-    private Flight hnlFlight0701;
-    private Flight jfkFlight0111;
     private Scanner userInput;
     private ListOfFlights scheduledFlights;
-    private Flight emptyFlight;
-    private String newName;
-    private String newNumber;
-    private String newDestination;
-    private Double newDuration;
-    private String newDate;
 
     public AirlineApp() {
         runAirlineApp();
@@ -42,7 +25,7 @@ public class AirlineApp {
 
         initializeAirlines();
 
-        System.out.println("\n Welcome to Emma's Guide to Airlines");
+        System.out.println("\n Welcome to Emma's Travel Guide to Airlines!");
 
         while (continueUser) {
             displayAirlineMenu();
@@ -54,13 +37,12 @@ public class AirlineApp {
             } else {
                 processCommand(command);
             }
-
-
         }
-        System.out.println("\n Have a good day!");
-
+        System.out.println("\n Thank you, have a good day!");
     }
 
+    // MODIFIES: this
+    // EFFECTS: processes the user command inputted
     private void processCommand(String command) {
         if (command.equals("a")) {
             runAddFlight(scheduledFlights);
@@ -69,29 +51,22 @@ public class AirlineApp {
         } else if (command.equals("r")) {
             runRemoveFlight(scheduledFlights);
         } else if (command.equals("v")) {
-            runViewFlight();
+            runViewFlight(scheduledFlights);
         } else {
-            System.out.println("The input is not a valid selection");
+            System.out.println("This input is not a valid selection");
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: initializes airline flights
     private void initializeAirlines() {
-        jfkFlight0105 = new Flight("JFKFlight0105", "010JFY", "JFK", 6.5,
-                "2022-01-05", "0900", 134);
-        jfkFlight0111 = new Flight("JFKFlight0111", "111JEY", "JFK", 6.5,
-                "2022-01-11", "1200", 138);
-        icnFlight0310 = new Flight("ICNFlight0310", "031MTY", "ICN", 11,
-                "2022-03-10", "1400", 188);
-        yycFlight0428 = new Flight("YYCFlight0428", "042ATY", "YYC", 2,
-                "2022-05-05", "1800", 110);
-        hnlFlight0701 = new Flight("HNLFlight0701", "070JFY", "HNL", 6.5,
-                "2022-07-01", "1530", 150);
         scheduledFlights = new ListOfFlights();
         userInput = new Scanner(System.in);
         userInput.useDelimiter("\n");
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates a new flight and adds it into initialized list of flights
     private void runAddFlight(ListOfFlights scheduledFlights) {
         System.out.println("What is the flight's name? \n");
         String newName = userInput.next();
@@ -99,7 +74,7 @@ public class AirlineApp {
         String newNumber = userInput.next();
         System.out.println("Where is this flight headed? \n");
         String newDestination = userInput.next();
-        System.out.println("What is the estimated duration of this flight? (xx.xx) \n");
+        System.out.println("What is the estimated duration of this flight? (double) \n");
         Double newDuration = userInput.nextDouble();
         System.out.println("When is this flight's departure date? (yyyy-mm-dd) \n");
         String newDate = userInput.next();
@@ -111,8 +86,7 @@ public class AirlineApp {
                 newDate, newTime, newMaxSeats);
         scheduledFlights.addFlight(newFlight);
         System.out.println("A new flight with name: " + newFlight.getName()
-                + " was successfully created");
-
+                + " was successfully created!");
     }
 
     // EFFECTS: displays options for user to choose from in the menu
@@ -124,27 +98,6 @@ public class AirlineApp {
         System.out.println("\n v -> view flight");
         System.out.println("\n q -> quit");
     }
-
-//    // MODIFIES: this
-//    // EFFECTS: conducts addition of flight into list
-//    private void runAddFlight(Flight f) {
-//        runUserCreateFlight();
-//        String selection = "";
-//        System.out.println("Would you like to add this flight to the schedule?");
-//        if (selection.equals("yes")) {
-//            scheduledFlights.addFlight(f);
-//            if (scheduledFlights.containsFlight(f.getFlightNum())) {
-//                System.out.println("\n This flight already exists in the scheduled flights");
-//            } else {
-//                System.out.println("\n Successful addition of Flight number:" + f.getFlightNum()
-//                        + " and Flight name:" + f.getName());
-//                runRemoveFlight(f);
-//            }
-//        } else if (selection.equals("no")) {
-//            System.out.println("What would you like to do instead?");;
-//        }
-//    }
-
 
     // MODIFIES: this
     // EFFECTS: conducts removal of flight from list
@@ -158,14 +111,15 @@ public class AirlineApp {
         Flight newestFlight = scheduledFlights.get(i);
         if (scheduledFlights.containsFlight(newestFlight)) {
             scheduledFlights.removeFlight(newestFlight);
-            System.out.println("Successful removal of flight: " + newestFlight.getName());
+            System.out.println("Successful removal of flight with name: " + newestFlight.getName()
+                    + " from scheduled flights");
         } else {
-            System.out.println("This flight does not exist in scheduled list");
+            System.out.println("Sorry, this flight does not exist in scheduled list!");
         }
     }
 
-
-    // EFFECTS: allows user to search flight given destination
+    // MODIFIES: this
+    // EFFECTS: allows user to search flight given its destination
     private void runSearchFlight(ListOfFlights scheduledFlights) {
         String pickedDestination = "";
         System.out.println("Where would you like to travel to?");
@@ -175,7 +129,6 @@ public class AirlineApp {
         for (int s = 0; s < numFlights; s++) {
             Flight flight = intersectList.get(s);
             String flightName = flight.getName();
-            String flightNum = flight.getFlightNum();
             System.out.println("The flights available for this destination: " + pickedDestination + " are "
                     + flightName);
         }
@@ -185,15 +138,16 @@ public class AirlineApp {
     }
 
     // EFFECTS: allows user to view flight details given by flight name
-    private void runViewFlight() {
+    private void runViewFlight(ListOfFlights scheduledFlights) {
         System.out.println("Which flight would you like to view the details of?");
         for (int s = 0; s < scheduledFlights.size(); s++) {
             Flight flight = scheduledFlights.get(s);
             System.out.println(flight.getName());
         }
         Integer i = userInput.nextInt();
+        Flight newestFlight = scheduledFlights.get(i);
+
         if (!scheduledFlights.isEmpty()) {
-            Flight newestFlight = scheduledFlights.get(i);
 //            String newFlightName = newestFlight.getName();
 //            String newFlightNum = newestFlight.getFlightNum();
 //            String newestDestination = newestFlight.getDestination();
@@ -201,16 +155,12 @@ public class AirlineApp {
 //            String newestDate = newestFlight.getDate();
 //            String newestTime = newestFlight.getTime();
 //            String newestMaxSeats = newestFlight.seatToString(newestFlight.getMaxSeats());
-            System.out.println("Here are the details of this flight: " + newestFlight);
-//                            + newestFlight.getName()
-//                    + newestFlight.getFlightNum()
-//                    + newestFlight.getDestination() + newestFlight.durationToString(newestFlight.getDuration())
-//                    + newestFlight.getDate() + newestFlight.getTime()
-//                    + newestFlight.seatToString(newestFlight.getMaxSeats()));
-        } else if (scheduledFlights.isEmpty()) {
+            System.out.println("Here are the details of this flight: "
+                    + newestFlight.getName() + newestFlight.getFlightNum() + newestFlight.getDestination()
+                    + newestFlight.getDuration() + newestFlight.getDate() + newestFlight.getTime()
+                    + newestFlight.getMaxSeats());
+        } else {
             System.out.println("Sorry, invalid input. This scheduled list is empty!");
         }
     }
-
-
 }

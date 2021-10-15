@@ -148,12 +148,4 @@ class ListOfFlightsTest {
         assertEquals(testFlight2, sampleLOF.get(1));
         assertEquals(testFlight3, sampleLOF.get(2));
     }
-
-//    @Test
-//    public void testStringToDate() {
-//        assertEquals(LocalDate.of(2022, Month.APRIL, 5),
-//                testFlight1.stringToDate("2022-Apr-05"));
-//    }
-
-
 }

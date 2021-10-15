@@ -1,26 +1,19 @@
 package model;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 // Represents a flight with a given flight number, destination, duration, date, cost, price range and seats available
 public class Flight {
     private String name;           // name of specific flight (plane)
-    private String flightNum;      // the plane number in 6 digits
-    private String destination;    // arrival destination of flight
-    private double duration;          // hours taken to arrival
-    private String date;              // date of departure: mmddyyyy
-    private String time;              // time of departure: 24-hour time
+    private String flightNum;      // the plane number
+    private String destination;    // arrival (location) destination of flight
+    private double duration;       // hours taken for arrival
+    private String date;           // date of departure: yyyy-mm-dd
+    private String time;           // time of departure: 24-hour time
     private String airport;        // name of airport for departure
-
-    private int cost;              // cost of one-way trip in $CAD
-    private String priceRange;     // indication of HIGH, GOOD or LOW in comparison to other flights
     private int maxSeats;          // max number of passenger seats for flight
 
-    // REQUIRES: flightNum ...
-    // EFFECTS: flight has given flight number, destination, duration and date
+
+    // EFFECTS: flight has given name, flight number, destination, duration, date, time and maxSeats
     public Flight(String name, String flightNum, String destination, double duration,
                   String date, String time, int maxSeats) {
         this.name = name;
@@ -49,52 +42,41 @@ public class Flight {
         return destination;
     }
 
+    // EFFECTS: returns duration of flight
     public double getDuration() {
         return duration;
     }
 
+    // EFFECTS: returns date of flight's departure
     public String getDate() {
         return date;
     }
 
+    // EFFECTS: returns time of flight of departure
     public String getTime() {
         return time;
     }
 
+    // EFFECTS: returns max amount of seats on the flight
     public int getMaxSeats() {
         return maxSeats;
     }
 
 
+    // MODIFIES: this
+    // EFFECTS: returns duration (double) to duration (String)
     public String durationToString(double duration) {
         String durationString = String.format("%1$,.2f", duration);
         return durationString;
     }
 
-//    public String dateToString(LocalDate date) {
-//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-//        String dateString = date.format(dateFormatter);
-//        return dateString;
-//    }
 
+    // MODIFIES: this
+    // EFFECTS: returns maxSeats (int) to maxSeats (string)
     public String seatToString(int maxSeats) {
         String seatString = String.format("%d", maxSeats);
         return seatString;
     }
-
-//    public LocalDate stringToDate(String newLocalDate) {
-//        DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-//        LocalDate localdate = LocalDate.parse(newLocalDate, localDateFormatter);
-//        return localdate;
-//    }
-
-
-
-
-
-
-
-
 
 
 }
