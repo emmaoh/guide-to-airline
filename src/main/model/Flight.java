@@ -11,7 +11,7 @@ public class Flight {
     private String flightNum;      // the plane number in 6 digits
     private String destination;    // arrival destination of flight
     private double duration;          // hours taken to arrival
-    private LocalDate date;              // date of departure: mmddyyyy
+    private String date;              // date of departure: mmddyyyy
     private String time;              // time of departure: 24-hour time
     private String airport;        // name of airport for departure
 
@@ -22,7 +22,7 @@ public class Flight {
     // REQUIRES: flightNum ...
     // EFFECTS: flight has given flight number, destination, duration and date
     public Flight(String name, String flightNum, String destination, double duration,
-                  LocalDate date, String time, int maxSeats) {
+                  String date, String time, int maxSeats) {
         this.name = name;
         this.flightNum = flightNum;
         this.destination = destination;
@@ -32,6 +32,7 @@ public class Flight {
         this.maxSeats = maxSeats;
         airport = "YVR";
     }
+
 
     // EFFECTS: returns name of plane
     public String getName() {
@@ -52,7 +53,7 @@ public class Flight {
         return duration;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -70,16 +71,23 @@ public class Flight {
         return durationString;
     }
 
-    public String dateToString(LocalDate date) {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-        String dateString = date.format(dateFormatter);
-        return dateString;
-    }
+//    public String dateToString(LocalDate date) {
+//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+//        String dateString = date.format(dateFormatter);
+//        return dateString;
+//    }
 
     public String seatToString(int maxSeats) {
         String seatString = String.format("%d", maxSeats);
         return seatString;
     }
+
+//    public LocalDate stringToDate(String newLocalDate) {
+//        DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+//        LocalDate localdate = LocalDate.parse(newLocalDate, localDateFormatter);
+//        return localdate;
+//    }
+
 
 
 

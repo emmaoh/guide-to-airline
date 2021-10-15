@@ -12,23 +12,28 @@ public class ListOfFlights {
     }
 
     // EFFECTS: adds a new flight into list of scheduled flights, if it doesn't exist in the list already
-    public void addFlight(Flight f) {
-        if (!containsFlight(f.getFlightNum())) {
-            allFlights.add((f));
+    public void addFlight(Flight f1) {
+        if (!containsFlight(f1)) {
+            allFlights.add((f1));
         }
+    }
+
+    public Flight get(int index) {
+        Flight f = allFlights.get(index);
+        return f;
     }
 
     // EFFECTS: removes flight from list of scheduled flights if it exists in the list already
     public void removeFlight(Flight f) {
-        if (containsFlight(f.getFlightNum())) {
+        if (containsFlight(f)) {
             allFlights.remove(f);
         }
     }
 
     // EFFECTS: returns true if flight exists in list, false otherwise. (checks by specific flight number)
-    public boolean containsFlight(String flightNum) {
+    public boolean containsFlight(Flight f1) {
         for (Flight nextFlight : allFlights) {
-            if (nextFlight.getFlightNum().equals(flightNum)) {
+            if (nextFlight.equals(f1)) {
                 return true;
             }
         }
@@ -52,14 +57,25 @@ public class ListOfFlights {
         return destinationList;
     }
 
-
-    // EFFECTS: returns flight with given name, null otherwise
-    public Flight viewFlight(String name) {
+    public boolean containsDestination(String dest) {
         for (Flight nextFlight : allFlights) {
-            if (nextFlight.getName().equals(name)) {
-                return nextFlight;
+            if (nextFlight.getDestination().equals(dest)) {
+                return true;
             }
         }
-        return null;
+        return false;
     }
+
+
+
+    public boolean isEmpty() {
+        return allFlights.isEmpty();
+    }
+
+
+
+
+
+
+
 }
