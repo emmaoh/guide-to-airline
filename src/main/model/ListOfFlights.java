@@ -53,8 +53,6 @@ public class ListOfFlights {
     }
 
 
-
-
     // EFFECTS: returns flight with given name, null otherwise
     public Flight viewFlight(String name) {
         for (Flight nextFlight : allFlights) {

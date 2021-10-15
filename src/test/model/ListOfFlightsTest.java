@@ -40,6 +40,17 @@ class ListOfFlightsTest {
     }
 
     @Test
+    public void testConstructors() {
+        assertEquals("TestFlight1", testFlight1.getName());
+        assertEquals("111EOK", testFlight1.getFlightNum());
+        assertEquals("JFK", testFlight1.getDestination());
+        assertEquals(6, testFlight1.getDuration());
+        assertEquals(LocalDate.of(2022, Month.APRIL, 5), testFlight1.getDate());
+        assertEquals("0800", testFlight1.getTime());
+        assertEquals(135, testFlight1.getMaxSeats());
+    }
+
+    @Test
     public void testAddFlight() {
         assertEquals(0, sampleLOF.size());
         sampleLOF.addFlight(testFlight1);
@@ -98,6 +109,7 @@ class ListOfFlightsTest {
         assertEquals(null, sampleLOF.viewFlight("TestFlight1"));
         sampleLOF.addFlight(testFlight1);
         assertEquals(testFlight1, sampleLOF.viewFlight("TestFlight1"));
+        assertEquals(null, sampleLOF.viewFlight("TestFlight2"));
     }
 
     @Test
