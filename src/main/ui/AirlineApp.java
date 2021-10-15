@@ -137,8 +137,8 @@ public class AirlineApp {
         }
     }
 
-    // EFFECTS: allows user to view flight details given by flight name
-    private void runViewFlight(ListOfFlights scheduledFlights) {
+    // EFFECTS: allows user to view flight details given by representation of index in list
+    public void runViewFlight(ListOfFlights scheduledFlights) {
         System.out.println("Which flight would you like to view the details of?");
         for (int s = 0; s < scheduledFlights.size(); s++) {
             Flight flight = scheduledFlights.get(s);
@@ -148,17 +148,14 @@ public class AirlineApp {
         Flight newestFlight = scheduledFlights.get(i);
 
         if (!scheduledFlights.isEmpty()) {
-//            String newFlightName = newestFlight.getName();
-//            String newFlightNum = newestFlight.getFlightNum();
-//            String newestDestination = newestFlight.getDestination();
-//            String newestDuration = newestFlight.durationToString(newestFlight.getDuration());
-//            String newestDate = newestFlight.getDate();
-//            String newestTime = newestFlight.getTime();
-//            String newestMaxSeats = newestFlight.seatToString(newestFlight.getMaxSeats());
-            System.out.println("Here are the details of this flight: "
-                    + newestFlight.getName() + newestFlight.getFlightNum() + newestFlight.getDestination()
-                    + newestFlight.getDuration() + newestFlight.getDate() + newestFlight.getTime()
-                    + newestFlight.getMaxSeats());
+            System.out.println("Here are the details of this flight for: " + newestFlight.getName());
+            System.out.println("The Flight Number: " + newestFlight.getFlightNum());
+            System.out.println("The Destination: " + newestFlight.getDestination());
+            System.out.println("Flight Duration: " + newestFlight.durationToString(newestFlight.getDuration())
+                    + " hours");
+            System.out.println("Flight Departure Date: " + newestFlight.getDate());
+            System.out.println("Flight Departure Time: " + newestFlight.getTime() + " hours");
+            System.out.println("Flight Maximum Seats: " + newestFlight.seatToString(newestFlight.getMaxSeats()));
         } else {
             System.out.println("Sorry, invalid input. This scheduled list is empty!");
         }

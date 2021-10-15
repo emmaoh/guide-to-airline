@@ -3,13 +3,7 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
-import java.time.LocalDate;
-import java.time.Month;
-
-
 import static org.junit.jupiter.api.Assertions.*;
-
 
 class ListOfFlightsTest {
     private ListOfFlights sampleLOF;
@@ -107,12 +101,6 @@ class ListOfFlightsTest {
     public void testDurationToString() {
         assertEquals("6.00", testFlight1.durationToString(testFlight1.getDuration()));
     }
-
-//    @Test
-//    public void testDateToString() {
-//        assertEquals("2022-Apr-05", testFlight1.dateToString(testFlight1.getDate()));
-//        assertEquals("2022-Jan-20", testFlight2.dateToString(testFlight2.getDate()));
-//    }
 
     @Test
     public void testSeatToString() {

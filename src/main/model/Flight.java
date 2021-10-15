@@ -1,6 +1,5 @@
 package model;
 
-
 // Represents a flight with a given flight number, destination, duration, date, cost, price range and seats available
 public class Flight {
     private String name;           // name of specific flight (plane)
