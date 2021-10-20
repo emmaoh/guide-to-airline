@@ -42,6 +42,10 @@ date, time and maximum number of seats in the plane.
 
 5. As a user, I want to be able to view the details of a given flight specified from the listed schedule. 
 
+6. As a user, I want to be able to save my list of scheduled flights to file. 
+
+7. As a user, I want to be able to reload my list of scheduled flights from the file. 
+
  
 
 
