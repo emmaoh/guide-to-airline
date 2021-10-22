@@ -4,7 +4,7 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 // Represents a flight with a given flight number, destination, duration, date, cost, price range and seats available
-public class Flight {
+public class Flight implements Writable {
     private String name;           // name of specific flight (plane)
     private String flightNum;      // the plane number
     private String destination;    // arrival (location) destination of flight

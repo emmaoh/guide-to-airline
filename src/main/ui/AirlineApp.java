@@ -60,7 +60,7 @@ public class AirlineApp {
     // MODIFIES: this
     // EFFECTS: initializes airline flights
     private void initializeAirlines() {
-        scheduledFlights = new ListOfFlights();
+        scheduledFlights = new ListOfFlights("New Scheduled Flights");
         userInput = new Scanner(System.in);
         userInput.useDelimiter("\n");
     }

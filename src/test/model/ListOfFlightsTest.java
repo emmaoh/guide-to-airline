@@ -15,7 +15,7 @@ class ListOfFlightsTest {
 
     @BeforeEach
     public void setUp() {
-        sampleLOF = new ListOfFlights();
+        sampleLOF = new ListOfFlights("New Flights");
         testFlight1 = new Flight("TestFlight1", "111EOK", "JFK", 6,
                 "2022-04-05", "0800", 135);
         testFlight2 = new Flight("TestFlight2", "124LYZ", "ICN", 11,
@@ -31,6 +31,7 @@ class ListOfFlightsTest {
     @Test
     public void testListOfFlights() {
         assertEquals(0, sampleLOF.size());
+        assertEquals("New Flights", sampleLOF.getName());
     }
 
     @Test

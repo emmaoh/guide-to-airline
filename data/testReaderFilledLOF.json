@@ -1,0 +1,30 @@
+{
+  "flights": [
+    {
+      "name": "Emma's JFK Airline",
+      "flightNum": "115JFK",
+      "destination": "JFK",
+      "duration": 6.0,
+      "date": "2021-12-01",
+      "time": "0800",
+      "maxSeats": 145
+    },
+    { "name": "Emma's ICN Airline",
+      "flightNum": "000ICN",
+      "destination": "ICN",
+      "duration": 10.5,
+      "date": "2022-01-07",
+      "time": "1400",
+      "maxSeats": 198
+    },
+    {"name": "Emma's HNL Airline",
+      "flightNum": "111HNL",
+      "destination": "HNL",
+      "duration": 6.5,
+      "date": "2022-02-14",
+      "time": "1000",
+      "maxSeats": 130
+    }
+  ],
+  "name": "My list of flights"
+}

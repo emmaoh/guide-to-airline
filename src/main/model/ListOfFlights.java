@@ -10,11 +10,17 @@ import java.util.List;
 // Represents a list of flights
 
 public class ListOfFlights implements Writable {
+    private String name;
     private List<Flight> allFlights;
 
     // EFFECTS: list of flights is empty
-    public ListOfFlights() {
+    public ListOfFlights(String name) {
+        this.name = name;
         allFlights = new ArrayList<>();
+    }
+
+    public String getName() {
+        return name;
     }
 
     // MODIFIES: this
@@ -58,7 +64,7 @@ public class ListOfFlights implements Writable {
 
     // EFFECTS: returns new list of flights that are available with same destination
     public ListOfFlights searchFlight(String destination) {
-        ListOfFlights destinationList = new ListOfFlights();
+        ListOfFlights destinationList = new ListOfFlights("New List Of Flights");
         for (Flight nextDestinationFlight : allFlights) {
             if ((nextDestinationFlight.getDestination().equals(destination))) {
                 destinationList.addFlight(nextDestinationFlight);

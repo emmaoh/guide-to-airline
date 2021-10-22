@@ -45,8 +45,9 @@ public class JsonReader {
 
     // EFFECTS: parses ListOfFlights from JSON object and returns it
     private ListOfFlights parseListOfFlights(JSONObject jsonObject) {
-        ListOfFlights lof = new ListOfFlights();
-        addFlight(lof, jsonObject);
+        String name = jsonObject.getString("name");
+        ListOfFlights lof = new ListOfFlights(name);
+        addFlights(lof, jsonObject);
         return lof;
     }
 
