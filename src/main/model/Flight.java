@@ -1,5 +1,8 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // Represents a flight with a given flight number, destination, duration, date, cost, price range and seats available
 public class Flight {
     private String name;           // name of specific flight (plane)
@@ -75,6 +78,19 @@ public class Flight {
     public String seatToString(int maxSeats) {
         String seatString = String.format("%d", maxSeats);
         return seatString;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("flightNum", flightNum);
+        json.put("destination", destination);
+        json.put("duration", duration);
+        json.put("date", date);
+        json.put("time", time);
+        json.put("maxSeats", maxSeats);
+        return json;
     }
 
 

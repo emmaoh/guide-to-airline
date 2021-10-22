@@ -1,9 +1,15 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListOfFlights {
+// Represents a list of flights
+
+public class ListOfFlights implements Writable {
     private List<Flight> allFlights;
 
     // EFFECTS: list of flights is empty
@@ -71,9 +77,24 @@ public class ListOfFlights {
         return false;
     }
 
-
     // EFFECTS: returns true if list is empty, false otherwise
     public boolean isEmpty() {
         return allFlights.isEmpty();
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("flights", flightsToJson());
+        return json;
+    }
+
+    private JSONArray flightsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Flight f : allFlights) {
+            jsonArray.put(f.toJson());
+        }
+        return jsonArray;
     }
 }
