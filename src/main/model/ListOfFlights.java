@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 // Represents a list of flights
@@ -36,6 +37,11 @@ public class ListOfFlights implements Writable {
     public Flight get(int index) {
         Flight pickedFlight = allFlights.get(index);
         return pickedFlight;
+    }
+
+    // EFFECTS: returns unmodifiable list of flights in this list of flights
+    public List<Flight> getAllFlights() {
+        return Collections.unmodifiableList(allFlights);
     }
 
     // MODIFIES: this

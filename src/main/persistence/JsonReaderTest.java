@@ -1,6 +1,8 @@
 package persistence;
 
+import model.Flight;
 import model.ListOfFlights;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -43,6 +45,10 @@ public class JsonReaderTest extends JsonTest {
             assertEquals(3, lof.size());
             checkFlight("Emma's JFK Airline", "115JFK", "JFK", 6.0,
                     "2021-12-01", "0800", 145, lof.get(0));
+            checkFlight("Emma's ICN Airline", "000ICN", "ICN", 10.5,
+                    "2022-01-07", "1400", 198, lof.get(1));
+            checkFlight("Emma's HNL Airline", "111HNL", "HNL", 6.5,
+                    "2022-02-14", "1000", 130, lof.get(2));
         } catch (IOException e) {
             fail("Couldn't read from file");
         }
