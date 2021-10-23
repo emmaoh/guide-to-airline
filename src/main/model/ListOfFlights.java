@@ -97,6 +97,7 @@ public class ListOfFlights implements Writable {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
+        json.put("name", name);
         json.put("flights", flightsToJson());
         return json;
     }

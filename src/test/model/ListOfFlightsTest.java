@@ -3,6 +3,10 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ListOfFlightsTest {
@@ -54,6 +58,7 @@ class ListOfFlightsTest {
         sampleLOF.addFlight(testFlight1);
         assertEquals(1, sampleLOF.size());
     }
+
 
     @Test
     public void testRemoveFlight() {
@@ -136,5 +141,13 @@ class ListOfFlightsTest {
         assertEquals(testFlight1, sampleLOF.get(0));
         assertEquals(testFlight2, sampleLOF.get(1));
         assertEquals(testFlight3, sampleLOF.get(2));
+    }
+
+    @Test
+    public void testGetAllFlights() {
+        sampleLOF.addFlight(testFlight1);
+        sampleLOF.addFlight(testFlight2);
+        ArrayList<Flight> testingList = new ArrayList<>(Arrays.asList(testFlight1, testFlight2));
+        assertEquals(testingList, sampleLOF.getAllFlights());
     }
 }

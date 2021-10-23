@@ -79,7 +79,7 @@ public class JsonWriterTest extends JsonTest {
             checkFlight("Emma's ICN Airline", "000ICN", "ICN", 10.5,
                     "2022-01-07", "1400", 198, lof.get(1));
             checkFlight("Emma's HNL Airline", "111HNL", "HNL", 6.5,
-                    "2021-02-14", "1000", 130, lof.get(2));
+                    "2022-02-14", "1000", 130, lof.get(2));
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
