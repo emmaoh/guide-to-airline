@@ -1,5 +1,8 @@
 package persistence;
 
+// This [JsnReader] references code from this [JSON-java] CPSC 210 repository
+// Link: https://github.com/stleary/JSON-java
+
 import model.ListOfFlights;
 import org.json.JSONObject;
 

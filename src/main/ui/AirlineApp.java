@@ -2,7 +2,12 @@ package ui;
 
 import model.Flight;
 import model.ListOfFlights;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 // This [AirlineApp] references code from [CPSC210] repository
@@ -10,10 +15,17 @@ import java.util.Scanner;
 
 // Airline Schedule Guide Application
 public class AirlineApp {
+    private static final String JSON_STORE = "./data/lof.json";
     private Scanner userInput;
     private ListOfFlights scheduledFlights;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
-    public AirlineApp() {
+    public AirlineApp() throws FileNotFoundException {
+        userInput = new Scanner(System.in);
+        scheduledFlights = new ListOfFlights("Emma's scheduled flights");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runAirlineApp();
     }
 
@@ -22,7 +34,7 @@ public class AirlineApp {
     public void runAirlineApp() {
         boolean continueUser = true;
         String command = null;
-
+        userInput = new Scanner(System.in);
         initializeAirlines();
 
         System.out.println("\n Welcome to Emma's Travel Guide to Airlines!");
@@ -52,6 +64,12 @@ public class AirlineApp {
             runRemoveFlight(scheduledFlights);
         } else if (command.equals("v")) {
             runViewFlight(scheduledFlights);
+        } else if (command.equals("p")) {
+            printFlights();
+        } else if (command.equals("f")) {
+            saveListOfFlights();
+        } else if (command.equals("l")) {
+            loadListOfFlights();
         } else {
             System.out.println("This input is not a valid selection");
         }
@@ -96,6 +114,9 @@ public class AirlineApp {
         System.out.println("\n r -> remove flight");
         System.out.println("\n s -> search flight");
         System.out.println("\n v -> view flight");
+        System.out.println("\n p -> print flights");
+        System.out.println("\n f -> save flights to file");
+        System.out.println("\n l -> load flights from file");
         System.out.println("\n q -> quit");
     }
 
@@ -158,6 +179,40 @@ public class AirlineApp {
             System.out.println("Flight Maximum Seats: " + newestFlight.seatToString(newestFlight.getMaxSeats()));
         } else {
             System.out.println("Sorry, invalid input. This scheduled list is empty!");
+        }
+    }
+
+    // EFFECTS: prints all the flight names in the list of scheduled flights to console
+    public void printFlights() {
+        List<Flight> allFlights = scheduledFlights.getAllFlights();
+
+        for (Flight f : allFlights) {
+            System.out.println(f.getName() + ": " + f.getFlightNum() + "\t" + f.getDestination()
+                    + "\t" + f.durationToString(f.getDuration()) + "\t" + f.getDate() + "\t" + f.getTime()
+                    + "\t" + f.seatToString(f.getMaxSeats()));
+        }
+    }
+
+    // EFFECTS: saves the list of scheduled flights to a file
+    public void saveListOfFlights() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(scheduledFlights);
+            jsonWriter.close();
+            System.out.println("Saved " + scheduledFlights.getName() + " to" + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to the file " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads the list of scheduled flights from the file
+    public void loadListOfFlights() {
+        try {
+            scheduledFlights = jsonReader.read();
+            System.out.println("Loaded " + scheduledFlights.getName() + " from" + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from the file: " + JSON_STORE);
         }
     }
 }

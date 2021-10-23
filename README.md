@@ -35,16 +35,18 @@ date, time and maximum number of seats in the plane.
 
 2. As a user, I want to be able to add a flight for the specific airline to a list of scheduled flights. 
 
-3.  As a user, I want to be able to search the list of scheduled flights that are available for a specific destination 
+3. As a user, I want to be able to search the list of scheduled flights that are available for a specific destination 
     that is of interest.
 
-4.  As a user, I want to be able to remove a flight from the list of scheduled flights. 
+4. As a user, I want to be able to remove a flight from the list of scheduled flights. 
 
-5. As a user, I want to be able to view the details of a given flight specified from the listed schedule. 
+5. As a user, I want to be able to view the details of one given flight specified from the listed schedule. 
 
 6. As a user, I want to be able to save my list of scheduled flights to file. 
 
 7. As a user, I want to be able to reload my list of scheduled flights from the file. 
+
+8. As a user, I want to be able to view all flights within the list of scheduled flights.
 
  
 
