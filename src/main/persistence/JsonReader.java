@@ -16,7 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-// Represents a reader that reads ListOfFlights from JSON data stored in file
+// Represents a reader that reads ListOfFlights (lof) from JSON data stored in file
 public class JsonReader {
     private String source;
 
@@ -51,7 +51,7 @@ public class JsonReader {
         return lof;
     }
 
-    // MODIFIES: ListOfFlights
+    // MODIFIES: ListOfFlights (lof)
     // EFFECTS: parses flights from JSON object and adds them to ListOfFlights
     private void addFlights(ListOfFlights lof, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("flights");
@@ -61,7 +61,7 @@ public class JsonReader {
         }
     }
 
-    // MODIFIES: ListOfFlights
+    // MODIFIES: ListOfFlights (lof)
     // EFFECTS: parses flight from JSON object and adds it to ListOfFlights
     private void addFlight(ListOfFlights lof, JSONObject jsonObject) {
         String name = jsonObject.getString("name");

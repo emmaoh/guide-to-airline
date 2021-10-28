@@ -28,6 +28,8 @@ public class JsonWriter {
         writer = new PrintWriter(new File(destination));
     }
 
+    // MODIFIES: THIS
+    // EFFECTS: writes the JSON representation of ListOfFLights to file
     public void write(ListOfFlights lof) {
         JSONObject json = lof.toJson();
         saveToFile(json.toString(TAB));
@@ -39,6 +41,8 @@ public class JsonWriter {
         writer.close();
     }
 
+    // MODIFIES: this
+    // EFFECTS: writes the string given to file
     private void saveToFile(String json) {
         writer.print(json);
     }

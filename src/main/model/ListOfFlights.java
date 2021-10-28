@@ -94,6 +94,7 @@ public class ListOfFlights implements Writable {
         return allFlights.isEmpty();
     }
 
+    //  create JSONObject of given fields of ListOfFlights to reference in object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
@@ -102,6 +103,7 @@ public class ListOfFlights implements Writable {
         return json;
     }
 
+    // converts flight in ListOfFlights to an array list in JSON format
     private JSONArray flightsToJson() {
         JSONArray jsonArray = new JSONArray();
 

@@ -80,6 +80,7 @@ public class Flight implements Writable {
         return seatString;
     }
 
+    // create JSONObject with given fields of flight to reference
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

@@ -57,7 +57,7 @@ public class JsonWriterTest extends JsonTest {
             assertEquals("My list of flights", lof.getName());
             assertEquals(0, lof.size());
         } catch (IOException e) {
-            fail("Exception should not have been thrown");
+            fail("IOException should not have been thrown");
         }
     }
 
@@ -85,7 +85,7 @@ public class JsonWriterTest extends JsonTest {
             checkFlight("Emma's HNL Airline", "111HNL", "HNL", 6.5,
                     "2022-02-14", "1000", 130, lof.get(2));
         } catch (IOException e) {
-            fail("Exception should not have been thrown");
+            fail("IOException should not have been thrown");
         }
     }
 }
