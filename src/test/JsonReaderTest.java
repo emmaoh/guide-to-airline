@@ -4,7 +4,6 @@
 import model.ListOfFlights;
 import org.junit.jupiter.api.Test;
 import persistence.JsonReader;
-import persistence.JsonTest;
 
 import java.io.IOException;
 

@@ -46,7 +46,7 @@ date, time and maximum number of seats in the plane.
 
 7. As a user, I want to be able to reload my list of scheduled flights from the file. 
 
-8. As a user, I want to be able to view all flights within the list of scheduled flights.
+8. As a user, I want to be able to view all saved flights within the list of scheduled flights that have been reloaded.
 
  
 

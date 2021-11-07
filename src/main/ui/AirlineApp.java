@@ -21,6 +21,7 @@ public class AirlineApp {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
+    // EFFECTS: initiates airline app, FileNotFoundException thrown if file does not exist
     public AirlineApp() throws FileNotFoundException {
         userInput = new Scanner(System.in);
         scheduledFlights = new ListOfFlights("Emma's scheduled flights");
