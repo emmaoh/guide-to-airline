@@ -1,5 +1,8 @@
 package ui;
 
+// This [AirlineGUI] references code from this [ListDemo] example from Oracle - JavaTutorials
+// Link: https://docs.oracle.com/javase/tutorial/uiswing/examples/components/index.html
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -21,7 +24,7 @@ public class AirlineGUI extends JPanel
     private static final String removeString = "Remove Flight";
     private JTextField flightName;
     private JButton addButton;
-
+    private JButton removeButton;
 
     @SuppressWarnings("methodlength")
     AirlineGUI() {
@@ -46,6 +49,10 @@ public class AirlineGUI extends JPanel
         addButton.addActionListener(addListener);
         addButton.setEnabled(false);
 
+        removeButton = new JButton(removeString);
+        removeButton.setActionCommand(removeString);
+        removeButton.addActionListener(new RemoveListener());
+
         flightName = new JTextField(10);
         flightName.addActionListener(addListener);
         flightName.getDocument().addDocumentListener(addListener);
@@ -54,6 +61,7 @@ public class AirlineGUI extends JPanel
 
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
+        buttonPane.add(removeButton);
         buttonPane.add(Box.createHorizontalStrut(5));
         buttonPane.add(new JSeparator((SwingConstants.VERTICAL)));
         buttonPane.add(Box.createHorizontalStrut(5));
@@ -63,6 +71,27 @@ public class AirlineGUI extends JPanel
 
         add(listScrollPane, BorderLayout.CENTER);
         add(buttonPane, BorderLayout.PAGE_END);
+    }
+
+    public class RemoveListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int index = list.getSelectedIndex();
+            listModel.remove(index);
+
+            int size = listModel.getSize();
+
+            if (size == 0) {
+                removeButton.setEnabled(false);
+            } else {
+                if (index == listModel.getSize()) {
+                    index--;
+                }
+                list.setSelectedIndex(index);
+                list.ensureIndexIsVisible(index);
+            }
+        }
     }
 
     // Listener shared by text field and add button
@@ -145,31 +174,11 @@ public class AirlineGUI extends JPanel
         if (e.getValueIsAdjusting() == false) {
 
             if (list.getSelectedIndex() == -1) {
-                addButton.setEnabled(false);
+                removeButton.setEnabled(false);
             } else {
-                addButton.setEnabled(true);
+                removeButton.setEnabled(true);
             }
         }
-    }
-
-    private void createAndShowGUI() {
-        JFrame frame = new JFrame("Emma's Travel Guide to Airlines");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JComponent newContentPane = new AirlineGUI();
-        newContentPane.setOpaque(true);
-        frame.setContentPane(newContentPane);
-
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-    public void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
     }
 }
 
