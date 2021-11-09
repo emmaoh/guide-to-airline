@@ -19,14 +19,14 @@ public class Main extends JFrame {
 
         JFrame frame = new JFrame("Emma's Travel Guide to Airlines");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBackground(new Color(75, 130, 150));
 
         JComponent newContentPane = new AirlineGUI();
         newContentPane.setOpaque(true);
         frame.setContentPane(newContentPane);
-
         frame.pack();
         frame.setVisible(true);
-        frame.getContentPane().setBackground(new Color(75, 130, 150));
+
 
 
 //            javax.swing.SwingUtilities.invokeLater(new Runnable() {
