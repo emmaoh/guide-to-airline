@@ -24,6 +24,7 @@ public class AirlineGUI extends JPanel
     private JButton addButton;
     private JButton removeButton;
     private JFrame frame;
+    private String newName;
 
     private JTextField nameField;
     private JTextField numField;
@@ -199,26 +200,149 @@ public class AirlineGUI extends JPanel
             super("Add a new flight");
         }
 
+        @SuppressWarnings("methodlength")
         @Override
         public void actionPerformed(ActionEvent e) {
             nameField = new JTextField();
             numField = new JTextField();
+            durationField = new JTextField();
+            dateField = new JTextField();
+            timeField = new JTextField();
+            String[] destinationStrings = getDestinationStrings();
+            destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
+            newName = nameField.getText();
+
             Object[] message = {
                     "Flight Name: ", nameField,
-                    "Flight Number: ", numField
+                    "Flight Number: ", numField,
+                    "Destination: ", destinationSpinner,
+                    "Duration: ", durationField,
+                    "Date of Departure: ", dateField,
+                    "Time of Departure: ", timeField
             };
-            String flightNamePane = JOptionPane.showInputDialog(null,
+
+            int flightNamePane = JOptionPane.showConfirmDialog(null,
                     message,
                     "Enter Flight Information",
-                    JOptionPane.QUESTION_MESSAGE);
+                    JOptionPane.OK_CANCEL_OPTION);
+            if (flightNamePane == JOptionPane.OK_OPTION) {
+                addNewToList();
+            }
         }
     }
 
-
-    public boolean alreadyInList(String name) {
-        return listModel.contains(name);
+    public void addNewToList() {
+        listModel.addElement(nameField.getText());
+        list.setEnabled(true);
     }
+
+
+
+    public String[] getDestinationStrings() {
+        String[] destinationStrings = {
+                "New York, USA (JFK)",
+                "Seoul, South Korea (ICN)",
+                "Honolulu, USA (HNL)"
+        };
+        return destinationStrings;
+    }
+
+    public JFormattedTextField getTextField(JSpinner spinner) {
+        JComponent editor = spinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            return ((JSpinner.DefaultEditor) editor).getTextField();
+        } else {
+            System.err.println("Unexpected editor type: "
+                    + spinner.getEditor().getClass()
+                    + " isn't a descendant of DefaultEditor");
+            return null;
+        }
+    }
+
+    //
+//    // Listener shared by text field and add button
+//    public class AddListener implements ActionListener, DocumentListener {
+//
+//        private boolean alreadyEnabled = false;
+//
+//        private JButton button;
+//
+//        //
+//        public void actionPerformed(ActionEvent e) {
+//            System.out.println("hello");
+//            ;
+//        }
+
+    //            System.out.println("hello");
+//            String nameInput = nameField.getText();
+//
+//            if (nameInput.equals("") || alreadyInList(nameInput)) {
+//                Toolkit.getDefaultToolkit().beep();
+//                nameField.requestFocusInWindow();
+//                nameField.selectAll();
+//                return;
+//            }
+//
+//            int index = list.getSelectedIndex(); // get selected index
+//            if (index == -1) { // no selection, so insert at beginning
+//                index = 0;
+//            } else {           // add after selected item
+//                index++;
+//            }
+//
+//            listModel.insertElementAt(nameInput, index);
+//
+//            nameField.requestFocusInWindow();
+//            nameField.setText("");
+//
+//            // Select new item and make visible on panel
+//            list.setSelectedIndex(index);
+//            list.ensureIndexIsVisible(index);
+////            list.set
+////            list.setEnabled(true);
+//        }
+//
+//
+//        @Override
+//        public void insertUpdate(DocumentEvent e) {
+//            enableButton();
+//        }
+//
+//        @Override
+//        public void removeUpdate(DocumentEvent e) {
+//            handleEmptyTextField(e);
+//        }
+//
+//        @Override
+//        public void changedUpdate(DocumentEvent e) {
+//            if (!handleEmptyTextField(e)) {
+//                enableButton();
+//            }
+//        }
+//
+//        private void enableButton() {
+//            if (!alreadyEnabled) {
+//                button.setEnabled(true);
+//            }
+//        }
+//
+//        private boolean handleEmptyTextField(DocumentEvent e) {
+//            if (e.getDocument().getLength() <= 0) {
+//                button.setEnabled(false);
+//                alreadyEnabled = false;
+//                return true;
+//            }
+//            return false;
+//        }
+//    }
+//
+//
+//    public boolean alreadyInList(String name) {
+//        return listModel.contains(name);
+//    }
+
 }
+
 
 
 
