@@ -3,6 +3,9 @@ package ui;
 // This [AirlineGUI] references code from this [ListDemo] example from Oracle - JavaTutorials
 // Link: https://docs.oracle.com/javase/tutorial/uiswing/examples/components/index.html
 
+import model.Flight;
+import model.ListOfFlights;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -16,7 +19,8 @@ public class AirlineGUI extends JPanel
     private static int frameWidth = 400;
     private static int frameLength = 400;
     private JList list;
-    private DefaultListModel listModel;
+    private DefaultListModel<String> flightListNames;
+    private ListOfFlights allListOfFlights;
 
     private static final String addString = "Add Flight";
     private static final String removeString = "Remove Flight";
@@ -24,15 +28,22 @@ public class AirlineGUI extends JPanel
     private JButton addButton;
     private JButton removeButton;
     private JFrame frame;
-    private String newName;
 
     private JTextField nameField;
     private JTextField numField;
+    private JSpinner destinationSpinner;
     private JTextField durationField;
     private JTextField dateField;
     private JTextField timeField;
-    private JSpinner destinationSpinner;
+    private JTextField maxSeatField;
 
+    private String nameInput;
+    private String numInput;
+    private String destinationInput;
+    private double durationInput;
+    private String dateInput;
+    private String timeInput;
+    private int maxSeatInput;
 
     @SuppressWarnings("methodlength")
     AirlineGUI() {
@@ -44,13 +55,14 @@ public class AirlineGUI extends JPanel
         frame.setVisible(true);
         frame.setBackground(new Color(75, 130, 150));
 
-        listModel = new DefaultListModel();
-        listModel.addElement("Flight111JFK");
-        listModel.addElement("Flight222ICN");
-        listModel.addElement("Flight333HNL");
+        flightListNames = new DefaultListModel<String>();
+        allListOfFlights = new ListOfFlights("New Scheduled Flights");
+//        listModel.addElement("Flight111JFK");
+//        listModel.addElement("Flight222ICN");
+//        listModel.addElement("Flight333HNL");
 
         // Create list and put it in scroll pane
-        list = new JList(listModel);
+        JList list = new JList(flightListNames);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         list.addListSelectionListener(this);
@@ -93,14 +105,14 @@ public class AirlineGUI extends JPanel
         @Override
         public void actionPerformed(ActionEvent e) {
             int index = list.getSelectedIndex();
-            listModel.remove(index);
+            flightListNames.remove(index);
 
-            int size = listModel.getSize();
+            int size = flightListNames.getSize();
 
             if (size == 0) {
                 removeButton.setEnabled(false);
             } else {
-                if (index == listModel.getSize()) {
+                if (index == flightListNames.getSize()) {
                     index--;
                 }
                 list.setSelectedIndex(index);
@@ -208,9 +220,9 @@ public class AirlineGUI extends JPanel
             durationField = new JTextField();
             dateField = new JTextField();
             timeField = new JTextField();
+            maxSeatField = new JTextField();
             String[] destinationStrings = getDestinationStrings();
             destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
-            newName = nameField.getText();
 
             Object[] message = {
                     "Flight Name: ", nameField,
@@ -218,24 +230,45 @@ public class AirlineGUI extends JPanel
                     "Destination: ", destinationSpinner,
                     "Duration: ", durationField,
                     "Date of Departure: ", dateField,
-                    "Time of Departure: ", timeField
+                    "Time of Departure: ", timeField,
+                    "Maximum Number of Seats: ", maxSeatField
             };
 
             int flightNamePane = JOptionPane.showConfirmDialog(null,
                     message,
                     "Enter Flight Information",
                     JOptionPane.OK_CANCEL_OPTION);
+
+            nameInput = nameField.getText();
+            numInput = numField.getText();
+            destinationInput = destinationSpinner.getToolTipText();
+            durationInput = Double.parseDouble(durationField.getText());
+            dateInput = dateField.getText();
+            timeInput = timeField.getText();
+            maxSeatInput = Integer.parseInt(maxSeatField.getText());
+
             if (flightNamePane == JOptionPane.OK_OPTION) {
-                addNewToList();
+//                addNewToList();
+                createNewFlight(nameInput, numInput, destinationInput, durationInput, dateInput, timeInput,
+                        maxSeatInput);
             }
         }
     }
 
-    public void addNewToList() {
-        listModel.addElement(nameField.getText());
-        list.setEnabled(true);
-    }
+//    public void addNewToList() {
+//        flightList.addElement(nameField.getText());
+//        list.setEnabled(true);
+//    }
 
+    public void createNewFlight(String nameInput, String numInput, String destinationInput, double durationInput,
+                                String dateInput, String timeInput, int maxSeatInput) {
+        Flight newFlight = new Flight(nameInput, numInput, destinationInput, durationInput, dateInput, timeInput,
+                maxSeatInput);
+        flightListNames.addElement(newFlight.getName());
+        allListOfFlights.addFlight(newFlight);
+        list.setEnabled(true);
+
+    }
 
 
     public String[] getDestinationStrings() {
