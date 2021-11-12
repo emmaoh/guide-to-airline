@@ -19,15 +19,20 @@ public class AirlineGUI extends JPanel
     private static int frameWidth = 400;
     private static int frameLength = 400;
     private JList list;
-    private DefaultListModel<String> flightListNames;
+    private DefaultListModel flightListNames;
     private ListOfFlights allListOfFlights;
+    private Flight chosenFlight;
+    private Flight viewFlight;
 
     private static final String addString = "Add Flight";
     private static final String removeString = "Remove Flight";
-    private JTextField flightName;
+    private static final String viewString = "View Flight Details";
     private JButton addButton;
     private JButton removeButton;
+    private JButton viewButton;
     private JFrame frame;
+    private JLabel flightDisplay;
+    private JOptionPane messageDisplay;
 
     private JTextField nameField;
     private JTextField numField;
@@ -45,6 +50,8 @@ public class AirlineGUI extends JPanel
     private String timeInput;
     private int maxSeatInput;
 
+    private String flightDetails;
+
     @SuppressWarnings("methodlength")
     AirlineGUI() {
         super((new BorderLayout()));
@@ -55,44 +62,36 @@ public class AirlineGUI extends JPanel
         frame.setVisible(true);
         frame.setBackground(new Color(75, 130, 150));
 
-        flightListNames = new DefaultListModel<String>();
+        flightListNames = new DefaultListModel();
         allListOfFlights = new ListOfFlights("New Scheduled Flights");
 //        listModel.addElement("Flight111JFK");
 //        listModel.addElement("Flight222ICN");
 //        listModel.addElement("Flight333HNL");
 
         // Create list and put it in scroll pane
-        JList list = new JList(flightListNames);
+        list = new JList(flightListNames);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         list.addListSelectionListener(this);
         list.setVisibleRowCount(5);
         JScrollPane listScrollPane = new JScrollPane(list);
 
-//        JButton addButton = new JButton(addString);
-//        AddListener addListener = new AddListener(addButton);
-//        addButton.setActionCommand(addString);
-//        addButton.addActionListener(addListener);
-//        addButton.setEnabled(false);
-
         removeButton = new JButton(removeString);
         removeButton.setActionCommand(removeString);
         removeButton.addActionListener(new RemoveListener());
 
-//        flightName = new JTextField(10);
-//        flightName.addActionListener(addListener);
-//        flightName.getDocument().addDocumentListener(addListener);
-//        String name = listModel.getElementAt(
-//                list.getSelectedIndex()).toString();
+        viewButton = new JButton(viewString);
+        viewButton.setActionCommand(viewString);
+        viewButton.addActionListener(new ViewListener());
 
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
         buttonPane.setBackground(new Color(60, 80, 100));
+        buttonPane.add(viewButton);
         buttonPane.add(removeButton);
         buttonPane.add(Box.createHorizontalStrut(5));
         buttonPane.add(new JSeparator((SwingConstants.VERTICAL)));
         buttonPane.add(Box.createHorizontalStrut(5));
-//        buttonPane.add(flightName);
         buttonPane.add(new JButton(new AddFlightAction()));
         buttonPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -106,6 +105,8 @@ public class AirlineGUI extends JPanel
         public void actionPerformed(ActionEvent e) {
             int index = list.getSelectedIndex();
             flightListNames.remove(index);
+            Flight chosenFlight = allListOfFlights.get(index);
+            allListOfFlights.removeFlight(chosenFlight);
 
             int size = flightListNames.getSize();
 
@@ -120,79 +121,6 @@ public class AirlineGUI extends JPanel
             }
         }
     }
-
-//    //  Listener shared by text field and add button
-//    public class AddListener implements ActionListener, DocumentListener {
-//        private boolean alreadyEnabled = false;
-//        private JButton button;
-//
-//        public AddListener(JButton button) {
-//            this.button = button;
-//        }
-//
-//        public void actionPerformed(ActionEvent e) {
-//            new AddFlightAction();
-//
-//            String name = flightName.getText();
-//
-//            if (name.equals("") || alreadyInList(name)) {
-//                Toolkit.getDefaultToolkit().beep();
-//                flightName.requestFocusInWindow();
-//                flightName.selectAll();
-//                return;
-//            }
-//
-//            int index = list.getSelectedIndex(); // get selected index
-//            if (index == -1) { // no selection, so insert at beginning
-//                index = 0;
-//            } else {           // add after selected item
-//                index++;
-//            }
-//
-//            listModel.addElement(flightName.getText()); // add Name at end of list
-//
-//            // Resetting text field after submission
-//            flightName.requestFocusInWindow();
-//            flightName.setText("");
-//
-//            // Select new item and make visible on panel
-//            list.setSelectedIndex(index);
-//            list.ensureIndexIsVisible(index);
-//        }
-//
-//
-//        @Override
-//        public void insertUpdate(DocumentEvent e) {
-//            enableButton();
-//        }
-//
-//        @Override
-//        public void removeUpdate(DocumentEvent e) {
-//            handleEmptyTextField(e);
-//        }
-//
-//        @Override
-//        public void changedUpdate(DocumentEvent e) {
-//            if (!handleEmptyTextField(e)) {
-//                enableButton();
-//            }
-//        }
-//
-//        private void enableButton() {
-//            if (!alreadyEnabled) {
-//                button.setEnabled(true);
-//            }
-//        }
-//
-//        private boolean handleEmptyTextField(DocumentEvent e) {
-//            if (e.getDocument().getLength() <= 0) {
-//                button.setEnabled(false);
-//                alreadyEnabled = false;
-//                return true;
-//            }
-//            return false;
-//        }
-//    }
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
@@ -241,24 +169,21 @@ public class AirlineGUI extends JPanel
 
             nameInput = nameField.getText();
             numInput = numField.getText();
-            destinationInput = destinationSpinner.getToolTipText();
+            String destinationInput = (String)destinationSpinner.getValue();
             durationInput = Double.parseDouble(durationField.getText());
             dateInput = dateField.getText();
             timeInput = timeField.getText();
             maxSeatInput = Integer.parseInt(maxSeatField.getText());
 
             if (flightNamePane == JOptionPane.OK_OPTION) {
-//                addNewToList();
                 createNewFlight(nameInput, numInput, destinationInput, durationInput, dateInput, timeInput,
                         maxSeatInput);
+            } else if (flightNamePane == JOptionPane.CANCEL_OPTION) {
+                System.out.println("Cancelled");
             }
         }
     }
 
-//    public void addNewToList() {
-//        flightList.addElement(nameField.getText());
-//        list.setEnabled(true);
-//    }
 
     public void createNewFlight(String nameInput, String numInput, String destinationInput, double durationInput,
                                 String dateInput, String timeInput, int maxSeatInput) {
@@ -266,16 +191,26 @@ public class AirlineGUI extends JPanel
                 maxSeatInput);
         flightListNames.addElement(newFlight.getName());
         allListOfFlights.addFlight(newFlight);
-        list.setEnabled(true);
-
     }
-
 
     public String[] getDestinationStrings() {
         String[] destinationStrings = {
-                "New York, USA (JFK)",
-                "Seoul, South Korea (ICN)",
-                "Honolulu, USA (HNL)"
+                "JFK - New York",
+                "YYZ - Toronto",
+                "ICN - Seoul",
+                "HNL - Honolulu",
+                "LHR - London",
+                "MXP - Milan",
+                "BCN - Barcelona",
+                "NRT - Tokyo",
+                "HKG - Hong Kong",
+                "LAX - Los Angeles",
+                "SFO - San Francisco",
+                "SEA - Seattle",
+                "SYD - Sydney",
+                "SVO - Moscow",
+                "DXB - Dubai",
+                "BKK - Bangkok"
         };
         return destinationStrings;
     }
@@ -292,89 +227,35 @@ public class AirlineGUI extends JPanel
         }
     }
 
-    //
-//    // Listener shared by text field and add button
-//    public class AddListener implements ActionListener, DocumentListener {
-//
-//        private boolean alreadyEnabled = false;
-//
-//        private JButton button;
-//
-//        //
-//        public void actionPerformed(ActionEvent e) {
-//            System.out.println("hello");
-//            ;
-//        }
+    public class ViewListener implements ActionListener {
 
-    //            System.out.println("hello");
-//            String nameInput = nameField.getText();
-//
-//            if (nameInput.equals("") || alreadyInList(nameInput)) {
-//                Toolkit.getDefaultToolkit().beep();
-//                nameField.requestFocusInWindow();
-//                nameField.selectAll();
-//                return;
-//            }
-//
-//            int index = list.getSelectedIndex(); // get selected index
-//            if (index == -1) { // no selection, so insert at beginning
-//                index = 0;
-//            } else {           // add after selected item
-//                index++;
-//            }
-//
-//            listModel.insertElementAt(nameInput, index);
-//
-//            nameField.requestFocusInWindow();
-//            nameField.setText("");
-//
-//            // Select new item and make visible on panel
-//            list.setSelectedIndex(index);
-//            list.ensureIndexIsVisible(index);
-////            list.set
-////            list.setEnabled(true);
-//        }
-//
-//
-//        @Override
-//        public void insertUpdate(DocumentEvent e) {
-//            enableButton();
-//        }
-//
-//        @Override
-//        public void removeUpdate(DocumentEvent e) {
-//            handleEmptyTextField(e);
-//        }
-//
-//        @Override
-//        public void changedUpdate(DocumentEvent e) {
-//            if (!handleEmptyTextField(e)) {
-//                enableButton();
-//            }
-//        }
-//
-//        private void enableButton() {
-//            if (!alreadyEnabled) {
-//                button.setEnabled(true);
-//            }
-//        }
-//
-//        private boolean handleEmptyTextField(DocumentEvent e) {
-//            if (e.getDocument().getLength() <= 0) {
-//                button.setEnabled(false);
-//                alreadyEnabled = false;
-//                return true;
-//            }
-//            return false;
-//        }
-//    }
-//
-//
-//    public boolean alreadyInList(String name) {
-//        return listModel.contains(name);
-//    }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int index = list.getSelectedIndex();
+            viewFlight = allListOfFlights.get(index);
+
+            if (list.getSelectedIndex() == -1) {
+                viewButton.setEnabled(false);
+            } else {
+                viewButton.setEnabled(true);
+            }
+
+            flightDetails = "Flight Number: " + viewFlight.getFlightNum() + "\n"
+                    + "Flight Destination: " + viewFlight.getDestination() + "\n"
+                    + "Duration: " + viewFlight.getDuration() + " Hours" + "\n"
+                    + "Date of Departure: " + viewFlight.getDate() + "\n"
+                    + "Time of Departure: " + viewFlight.getTime() + " Hours" + "\n"
+                    + "Maximum Number of Seats: " + viewFlight.getMaxSeats();
+
+            ImageIcon message = new ImageIcon("data/message.jpeg");
+
+            JOptionPane.showMessageDialog(null, flightDetails, "Flight Details of " + viewFlight.getName(),
+                    JOptionPane.INFORMATION_MESSAGE, message);
+        }
+    }
 
 }
+
 
 
 
