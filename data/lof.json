@@ -2,40 +2,22 @@
     "name": "New Scheduled Flights",
     "flights": [
         {
-            "duration": 6,
-            "date": "2021-12-01",
-            "flightNum": "80000",
-            "name": "emma200",
-            "destination": "jfk",
-            "maxSeats": 167,
-            "time": "0800"
+            "duration": 9.5,
+            "date": "12-09-21",
+            "flightNum": "FlightHello",
+            "name": "Karen111",
+            "destination": "LHR - London",
+            "maxSeats": 144,
+            "time": "1530"
         },
         {
-            "duration": 6,
-            "date": "2022-01-01",
-            "flightNum": "jfk999",
-            "name": "emma899",
-            "destination": "jfk",
-            "maxSeats": 177,
-            "time": "0900"
-        },
-        {
-            "duration": 6,
-            "date": "2021-12-09",
-            "flightNum": "800jfk",
-            "name": "emma0000",
-            "destination": "jfk",
-            "maxSeats": 160,
-            "time": "0800"
-        },
-        {
-            "duration": 10.5,
-            "date": "12-21-21",
-            "flightNum": "Flight222",
-            "name": "EdmundOh",
-            "destination": "ICN - Seoul",
-            "maxSeats": 180,
-            "time": "0800"
+            "duration": 14.5,
+            "date": "04-15-22",
+            "flightNum": "Flight1212",
+            "name": "UBCFlight",
+            "destination": "BCN - Barcelona",
+            "maxSeats": 190,
+            "time": "1600"
         }
     ]
 }

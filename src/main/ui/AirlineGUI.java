@@ -8,6 +8,8 @@ import model.ListOfFlights;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -37,11 +39,13 @@ public class AirlineGUI extends JPanel
     private static final String viewString = "View Flight Details";
     private static final String saveString = "Save Schedule of Flights";
     private static final String loadString = "Load Schedule of Flights";
+    private static final String printString = "Print Schedule of Flights";
     private JButton addButton;
     private JButton removeButton;
     private JButton viewButton;
     private JButton saveButton;
     private JButton loadButton;
+    private JButton printButton;
     private JFrame frame;
     private JLabel flightDisplay;
     private JOptionPane messageDisplay;
@@ -109,6 +113,10 @@ public class AirlineGUI extends JPanel
         loadButton.setActionCommand(loadString);
         loadButton.addActionListener(new LoadListener());
 
+        printButton = new JButton(printString);
+        printButton.setActionCommand(printString);
+        printButton.addActionListener(new PrintListener());
+
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
         buttonPane.setBackground(new Color(60, 80, 100));
@@ -116,6 +124,7 @@ public class AirlineGUI extends JPanel
         buttonPane.add(removeButton);
         buttonPane.add(saveButton);
         buttonPane.add(loadButton);
+        buttonPane.add(printButton);
         buttonPane.add(Box.createHorizontalStrut(5));
         buttonPane.add(new JSeparator((SwingConstants.VERTICAL)));
         buttonPane.add(Box.createHorizontalStrut(5));
@@ -124,6 +133,17 @@ public class AirlineGUI extends JPanel
 
         add(listScrollPane, BorderLayout.CENTER);
         add(buttonPane, BorderLayout.PAGE_END);
+    }
+
+    public class PrintListener implements ActionListener {
+        List<Flight> savedFlights = allListOfFlights.getAllFlights();
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            for (Flight f: savedFlights) {
+                flightListNames.addElement(f.getName());
+            }
+        }
     }
 
     public class SaveListener implements ActionListener {
@@ -151,7 +171,7 @@ public class AirlineGUI extends JPanel
             try {
                 allListOfFlights = jsonReader.read();
                 JOptionPane.showMessageDialog(frame,
-                        "Loaded" + allListOfFlights.getName() + " from" + JSON_STORE, "Loaded File",
+                        "Loaded " + allListOfFlights.getName() + " from" + JSON_STORE, "Loaded File",
                         JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException i) {
                 JOptionPane.showMessageDialog(frame,
