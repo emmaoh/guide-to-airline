@@ -5,6 +5,8 @@ package ui;
 
 import model.Flight;
 import model.ListOfFlights;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -12,6 +14,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 public class AirlineGUI extends JPanel
@@ -24,12 +28,20 @@ public class AirlineGUI extends JPanel
     private Flight chosenFlight;
     private Flight viewFlight;
 
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+    private static final String JSON_STORE = "./data/lof.json";
+
     private static final String addString = "Add Flight";
     private static final String removeString = "Remove Flight";
     private static final String viewString = "View Flight Details";
+    private static final String saveString = "Save Schedule of Flights";
+    private static final String loadString = "Load Schedule of Flights";
     private JButton addButton;
     private JButton removeButton;
     private JButton viewButton;
+    private JButton saveButton;
+    private JButton loadButton;
     private JFrame frame;
     private JLabel flightDisplay;
     private JOptionPane messageDisplay;
@@ -52,18 +64,23 @@ public class AirlineGUI extends JPanel
 
     private String flightDetails;
 
+
     @SuppressWarnings("methodlength")
     AirlineGUI() {
         super((new BorderLayout()));
+//
+//        JFrame frame = new JFrame(); // create frame
+//        frame.setSize(frameWidth, frameLength); // set frame width and length
+//        frame.setTitle("Emma's Travel Guide to Airlines");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.pack();
+//        frame.setVisible(true);
 
-        JFrame frame = new JFrame("Emma's Travel Guide to Airlines");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-        frame.setBackground(new Color(75, 130, 150));
 
         flightListNames = new DefaultListModel();
         allListOfFlights = new ListOfFlights("New Scheduled Flights");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
 //        listModel.addElement("Flight111JFK");
 //        listModel.addElement("Flight222ICN");
 //        listModel.addElement("Flight333HNL");
@@ -84,11 +101,21 @@ public class AirlineGUI extends JPanel
         viewButton.setActionCommand(viewString);
         viewButton.addActionListener(new ViewListener());
 
+        saveButton = new JButton(saveString);
+        saveButton.setActionCommand(saveString);
+        saveButton.addActionListener(new SaveListener());
+
+        loadButton = new JButton(loadString);
+        loadButton.setActionCommand(loadString);
+        loadButton.addActionListener(new LoadListener());
+
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
         buttonPane.setBackground(new Color(60, 80, 100));
         buttonPane.add(viewButton);
         buttonPane.add(removeButton);
+        buttonPane.add(saveButton);
+        buttonPane.add(loadButton);
         buttonPane.add(Box.createHorizontalStrut(5));
         buttonPane.add(new JSeparator((SwingConstants.VERTICAL)));
         buttonPane.add(Box.createHorizontalStrut(5));
@@ -98,6 +125,42 @@ public class AirlineGUI extends JPanel
         add(listScrollPane, BorderLayout.CENTER);
         add(buttonPane, BorderLayout.PAGE_END);
     }
+
+    public class SaveListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                jsonWriter.open();
+                jsonWriter.write(allListOfFlights);
+                jsonWriter.close();
+                JOptionPane.showMessageDialog(frame, "Saved " + allListOfFlights.getName() + " to"
+                                + JSON_STORE, "Save Successfully Completed",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (FileNotFoundException f) {
+                JOptionPane.showMessageDialog(frame, "Unable to write to the file: " + JSON_STORE, "Save Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    public class LoadListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                allListOfFlights = jsonReader.read();
+                JOptionPane.showMessageDialog(frame,
+                        "Loaded" + allListOfFlights.getName() + " from" + JSON_STORE, "Loaded File",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException i) {
+                JOptionPane.showMessageDialog(frame,
+                        "Unable to read from the file: " + JSON_STORE, "Load Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
 
     public class RemoveListener implements ActionListener {
 
@@ -169,7 +232,7 @@ public class AirlineGUI extends JPanel
 
             nameInput = nameField.getText();
             numInput = numField.getText();
-            String destinationInput = (String)destinationSpinner.getValue();
+            String destinationInput = (String) destinationSpinner.getValue();
             durationInput = Double.parseDouble(durationField.getText());
             dateInput = dateField.getText();
             timeInput = timeField.getText();
@@ -247,9 +310,9 @@ public class AirlineGUI extends JPanel
                     + "Time of Departure: " + viewFlight.getTime() + " Hours" + "\n"
                     + "Maximum Number of Seats: " + viewFlight.getMaxSeats();
 
-            ImageIcon message = new ImageIcon("data/message.jpeg");
+            ImageIcon message = new ImageIcon("data/plane.jpeg");
 
-            JOptionPane.showMessageDialog(null, flightDetails, "Flight Details of " + viewFlight.getName(),
+            JOptionPane.showMessageDialog(frame, flightDetails, "Flight Details of " + viewFlight.getName(),
                     JOptionPane.INFORMATION_MESSAGE, message);
         }
     }

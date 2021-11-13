@@ -27,6 +27,15 @@
             "destination": "jfk",
             "maxSeats": 160,
             "time": "0800"
+        },
+        {
+            "duration": 10.5,
+            "date": "12-21-21",
+            "flightNum": "Flight222",
+            "name": "EdmundOh",
+            "destination": "ICN - Seoul",
+            "maxSeats": 180,
+            "time": "0800"
         }
     ]
 }
