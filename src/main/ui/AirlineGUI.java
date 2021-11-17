@@ -8,8 +8,6 @@ import model.ListOfFlights;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import java.util.List;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -20,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
+// Airline Schedule Guide Graphical Application
 public class AirlineGUI extends JPanel
         implements ListSelectionListener {
     private static int frameWidth = 400;
@@ -29,6 +28,7 @@ public class AirlineGUI extends JPanel
     private ListOfFlights allListOfFlights;
     private Flight chosenFlight;
     private Flight viewFlight;
+    private JScrollPane listScrollPane;
 
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -50,53 +50,33 @@ public class AirlineGUI extends JPanel
     private JLabel flightDisplay;
     private JOptionPane messageDisplay;
 
-    private JTextField nameField;
-    private JTextField numField;
-    private JSpinner destinationSpinner;
-    private JTextField durationField;
-    private JTextField dateField;
-    private JTextField timeField;
-    private JTextField maxSeatField;
-
-    private String nameInput;
-    private String numInput;
-    private String destinationInput;
-    private double durationInput;
-    private String dateInput;
-    private String timeInput;
-    private int maxSeatInput;
-
     private String flightDetails;
 
 
-    @SuppressWarnings("methodlength")
-    AirlineGUI() {
-        super((new BorderLayout()));
-//
-//        JFrame frame = new JFrame(); // create frame
-//        frame.setSize(frameWidth, frameLength); // set frame width and length
-//        frame.setTitle("Emma's Travel Guide to Airlines");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.pack();
-//        frame.setVisible(true);
-
-
+    // MODIFIES: this
+    // EFFECTS: initializes the Airline application
+    public AirlineGUI() {
         flightListNames = new DefaultListModel();
         allListOfFlights = new ListOfFlights("New Scheduled Flights");
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
-//        listModel.addElement("Flight111JFK");
-//        listModel.addElement("Flight222ICN");
-//        listModel.addElement("Flight333HNL");
 
-        // Create list and put it in scroll pane
+        initializeButtons();
+        addScrollPane();
+        addButtonPanel();
+    }
+
+    // EFFECTS: creates a list and puts it in a scroll pane for display
+    public void addScrollPane() {
         list = new JList(flightListNames);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         list.addListSelectionListener(this);
-        list.setVisibleRowCount(5);
-        JScrollPane listScrollPane = new JScrollPane(list);
+        list.setVisibleRowCount(10);
+    }
 
+    // EFFECTS: initializes JButtons for each task and corresponds it to a Listener
+    public void initializeButtons() {
         removeButton = new JButton(removeString);
         removeButton.setActionCommand(removeString);
         removeButton.addActionListener(new RemoveListener());
@@ -117,35 +97,45 @@ public class AirlineGUI extends JPanel
         printButton.setActionCommand(printString);
         printButton.addActionListener(new PrintListener());
 
-        JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
-        buttonPane.setBackground(new Color(60, 80, 100));
-        buttonPane.add(viewButton);
-        buttonPane.add(removeButton);
-        buttonPane.add(saveButton);
-        buttonPane.add(loadButton);
-        buttonPane.add(printButton);
-        buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(new JSeparator((SwingConstants.VERTICAL)));
-        buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(new JButton(new AddFlightAction()));
-        buttonPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        add(listScrollPane, BorderLayout.CENTER);
-        add(buttonPane, BorderLayout.PAGE_END);
+        addButton = new JButton(addString);
+        addButton.setActionCommand(addString);
+        addButton.addActionListener(new AddListener());
     }
 
-    public class PrintListener implements ActionListener {
-        List<Flight> savedFlights = allListOfFlights.getAllFlights();
+    // EFFECTS: adds all the buttons for tasks into one JPanel
+    public void addButtonPanel() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBackground(new Color(60, 80, 100));
+        buttonPanel.add(viewButton);
+        buttonPanel.add(removeButton);
+        buttonPanel.add(saveButton);
+        buttonPanel.add(loadButton);
+        buttonPanel.add(printButton);
+        buttonPanel.add(addButton);
+        buttonPanel.add(Box.createHorizontalStrut(5));
+        buttonPanel.add(new JSeparator((SwingConstants.VERTICAL)));
+        buttonPanel.add(Box.createHorizontalStrut(5));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        buttonPanel.setSize(100, 200);
 
+        JScrollPane listScrollPane = new JScrollPane(list);
+
+        add(listScrollPane, BorderLayout.EAST);
+        add(buttonPanel, BorderLayout.WEST);
+    }
+
+    // EFFECTS: when print button is chosen, displays all list of flights in schedule
+    public class PrintListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            for (Flight f: savedFlights) {
+            for (Flight f : allListOfFlights.getAllFlights()) {
                 flightListNames.addElement(f.getName());
             }
         }
     }
 
+    // EFFECTS: when save button is chosen, saves all list of flights into JSON file
     public class SaveListener implements ActionListener {
 
         @Override
@@ -164,6 +154,7 @@ public class AirlineGUI extends JPanel
         }
     }
 
+    // EFFECTS: when load button is chosen, loads all list of flights from JSON file
     public class LoadListener implements ActionListener {
 
         @Override
@@ -181,7 +172,8 @@ public class AirlineGUI extends JPanel
         }
     }
 
-
+    // MODIFIES: this
+    // EFFECTS: when remove button is chosen, removes chosen index of flight from display and list of flights
     public class RemoveListener implements ActionListener {
 
         @Override
@@ -217,46 +209,43 @@ public class AirlineGUI extends JPanel
         }
     }
 
-    private class AddFlightAction extends AbstractAction {
+    // MODIFIES: this
+    // EFFECTS: when add button is chosen, prompts user to add in a new flight with inputting fields
+    private class AddListener implements ActionListener {
+        JTextField nameField = new JTextField();
+        JTextField numField = new JTextField();
+        JTextField durationField = new JTextField();
+        JTextField dateField = new JTextField();
+        JTextField timeField = new JTextField();
+        JTextField maxSeatField = new JTextField();
+        String[] destinationStrings = getDestinationStrings();
+        JSpinner destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
 
-        AddFlightAction() {
-            super("Add a new flight");
-        }
+        Object[] message = {
+                "Flight Name: ", nameField,
+                "Flight Number: ", numField,
+                "Destination: ", destinationSpinner,
+                "Duration: ", durationField,
+                "Date of Departure: ", dateField,
+                "Time of Departure: ", timeField,
+                "Maximum Number of Seats: ", maxSeatField
+        };
 
-        @SuppressWarnings("methodlength")
         @Override
         public void actionPerformed(ActionEvent e) {
-            nameField = new JTextField();
-            numField = new JTextField();
-            durationField = new JTextField();
-            dateField = new JTextField();
-            timeField = new JTextField();
-            maxSeatField = new JTextField();
-            String[] destinationStrings = getDestinationStrings();
-            destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
-
-            Object[] message = {
-                    "Flight Name: ", nameField,
-                    "Flight Number: ", numField,
-                    "Destination: ", destinationSpinner,
-                    "Duration: ", durationField,
-                    "Date of Departure: ", dateField,
-                    "Time of Departure: ", timeField,
-                    "Maximum Number of Seats: ", maxSeatField
-            };
 
             int flightNamePane = JOptionPane.showConfirmDialog(null,
                     message,
                     "Enter Flight Information",
                     JOptionPane.OK_CANCEL_OPTION);
 
-            nameInput = nameField.getText();
-            numInput = numField.getText();
+            String nameInput = nameField.getText();
+            String numInput = numField.getText();
             String destinationInput = (String) destinationSpinner.getValue();
-            durationInput = Double.parseDouble(durationField.getText());
-            dateInput = dateField.getText();
-            timeInput = timeField.getText();
-            maxSeatInput = Integer.parseInt(maxSeatField.getText());
+            Double durationInput = Double.parseDouble(durationField.getText());
+            String dateInput = dateField.getText();
+            String timeInput = timeField.getText();
+            Integer maxSeatInput = Integer.parseInt(maxSeatField.getText());
 
             if (flightNamePane == JOptionPane.OK_OPTION) {
                 createNewFlight(nameInput, numInput, destinationInput, durationInput, dateInput, timeInput,
@@ -268,6 +257,7 @@ public class AirlineGUI extends JPanel
     }
 
 
+    // EFFECTS: creates a new flight object given by the inputted fields from user
     public void createNewFlight(String nameInput, String numInput, String destinationInput, double durationInput,
                                 String dateInput, String timeInput, int maxSeatInput) {
         Flight newFlight = new Flight(nameInput, numInput, destinationInput, durationInput, dateInput, timeInput,
@@ -276,6 +266,7 @@ public class AirlineGUI extends JPanel
         allListOfFlights.addFlight(newFlight);
     }
 
+    // EFFECTS: returns all destinations (string) that user may choose from for spinner
     public String[] getDestinationStrings() {
         String[] destinationStrings = {
                 "JFK - New York",
@@ -310,6 +301,7 @@ public class AirlineGUI extends JPanel
         }
     }
 
+    // EFFECTS: when view button is chosen, displays all information of single flight chosen
     public class ViewListener implements ActionListener {
 
         @Override

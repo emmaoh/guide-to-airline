@@ -1,14 +1,13 @@
 package ui;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.FileNotFoundException;
 
 public class Main extends JFrame {
-    private static int frameWidth = 400;
-    private static int frameLength = 400;
+    private static final int frameWidth = 400;
+    private static final int frameLength = 400;
 
     public static void main(String[] args) {
+
         JFrame frame = new JFrame(); // create frame
         frame.setSize(frameWidth, frameLength); // set frame width and length
         frame.setTitle("Emma's Travel Guide to Airlines");
@@ -26,8 +25,7 @@ public class Main extends JFrame {
         frame.setContentPane(newContentPane);
         frame.pack();
         frame.setVisible(true);
-
-
+        frame.setSize(600,600);
 
 
 //            javax.swing.SwingUtilities.invokeLater(new Runnable() {

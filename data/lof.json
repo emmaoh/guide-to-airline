@@ -2,22 +2,31 @@
     "name": "New Scheduled Flights",
     "flights": [
         {
-            "duration": 9.5,
+            "duration": 10.5,
             "date": "12-09-21",
-            "flightNum": "FlightHello",
-            "name": "Karen111",
-            "destination": "LHR - London",
-            "maxSeats": 144,
-            "time": "1530"
+            "flightNum": "Flight777",
+            "name": "EmmaFlight",
+            "destination": "ICN - Seoul",
+            "maxSeats": 190,
+            "time": "1400"
+        },
+        {
+            "duration": 11.5,
+            "date": "12-08-21",
+            "flightNum": "89234",
+            "name": "EdmundB",
+            "destination": "BCN - Barcelona",
+            "maxSeats": 178,
+            "time": "1400"
         },
         {
             "duration": 14.5,
-            "date": "04-15-22",
-            "flightNum": "Flight1212",
-            "name": "UBCFlight",
-            "destination": "BCN - Barcelona",
-            "maxSeats": 190,
-            "time": "1600"
+            "date": "12-05-21",
+            "flightNum": "11111",
+            "name": "UBCFlight1",
+            "destination": "HKG - Hong Kong",
+            "maxSeats": 199,
+            "time": "0900"
         }
     ]
 }
