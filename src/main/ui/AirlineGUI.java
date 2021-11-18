@@ -40,12 +40,14 @@ public class AirlineGUI extends JPanel
     private static final String saveString = "Save Schedule of Flights";
     private static final String loadString = "Load Schedule of Flights";
     private static final String printString = "Print Schedule of Flights";
+    private static final String searchString = "Search Flight";
     private JButton addButton;
     private JButton removeButton;
     private JButton viewButton;
     private JButton saveButton;
     private JButton loadButton;
     private JButton printButton;
+    private JButton searchButton;
     private JFrame frame;
     private JLabel flightDisplay;
     private JOptionPane messageDisplay;
@@ -61,10 +63,12 @@ public class AirlineGUI extends JPanel
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
 
+
         initializeButtons();
         addScrollPane();
         addButtonPanel();
     }
+
 
     // EFFECTS: creates a list and puts it in a scroll pane for display
     public void addScrollPane() {
@@ -76,48 +80,71 @@ public class AirlineGUI extends JPanel
     }
 
     // EFFECTS: initializes JButtons for each task and corresponds it to a Listener
+    @SuppressWarnings("methodlength")
     public void initializeButtons() {
         removeButton = new JButton(removeString);
         removeButton.setActionCommand(removeString);
         removeButton.addActionListener(new RemoveListener());
+        removeButton.setBorder(BorderFactory.createRaisedBevelBorder());
 
         viewButton = new JButton(viewString);
         viewButton.setActionCommand(viewString);
         viewButton.addActionListener(new ViewListener());
+        viewButton.setBorder(BorderFactory.createRaisedBevelBorder());
 
         saveButton = new JButton(saveString);
         saveButton.setActionCommand(saveString);
         saveButton.addActionListener(new SaveListener());
+        saveButton.setBorder(BorderFactory.createRaisedBevelBorder());
 
         loadButton = new JButton(loadString);
         loadButton.setActionCommand(loadString);
         loadButton.addActionListener(new LoadListener());
+        loadButton.setBorder(BorderFactory.createRaisedBevelBorder());
 
         printButton = new JButton(printString);
         printButton.setActionCommand(printString);
         printButton.addActionListener(new PrintListener());
+        printButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        ;
 
         addButton = new JButton(addString);
         addButton.setActionCommand(addString);
         addButton.addActionListener(new AddListener());
+        addButton.setBorder(BorderFactory.createRaisedBevelBorder());
+
+        searchButton = new JButton(searchString);
+        searchButton.setActionCommand(searchString);
+        searchButton.addActionListener(new SearchListener());
+        searchButton.setBorder(BorderFactory.createRaisedBevelBorder());
     }
 
+
     // EFFECTS: adds all the buttons for tasks into one JPanel
+    @SuppressWarnings("methodlength")
     public void addButtonPanel() {
+        ImageIcon blueIcon = new ImageIcon("data/blue.png");
+        Image newBlue = blueIcon.getImage();
+        Image scaledBlue = newBlue.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
+        blueIcon = new ImageIcon(scaledBlue);
+        JLabel blueLabel = new JLabel(blueIcon);
+        blueLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
         JPanel buttonPanel = new JPanel();
+        buttonPanel.add(blueLabel);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBackground(new Color(60, 80, 100));
+        buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(viewButton);
         buttonPanel.add(removeButton);
         buttonPanel.add(saveButton);
         buttonPanel.add(loadButton);
         buttonPanel.add(printButton);
         buttonPanel.add(addButton);
+        buttonPanel.add(searchButton);
         buttonPanel.add(Box.createHorizontalStrut(5));
         buttonPanel.add(new JSeparator((SwingConstants.VERTICAL)));
         buttonPanel.add(Box.createHorizontalStrut(5));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        buttonPanel.setSize(100, 200);
 
         JScrollPane listScrollPane = new JScrollPane(list);
 
@@ -135,18 +162,65 @@ public class AirlineGUI extends JPanel
         }
     }
 
+    // EFFECTS: Prompts user to pick a certain destination and displays flights available when search button chosen
+    public class SearchListener implements ActionListener {
+
+        String[] destinationStrings = getDestinationStrings();
+        JSpinner destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
+        String chosenDestination = (String) destinationSpinner.getValue();
+
+        Object[] destinationMessage = {
+                "Destination ", destinationSpinner
+        };
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ImageIcon globeImage = new ImageIcon("data/globe.jpeg");
+            Image newGlobe = globeImage.getImage();
+            Image newImage = newGlobe.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
+            globeImage = new ImageIcon(newImage);
+
+            int flightSearchPane = JOptionPane.showConfirmDialog(null,
+                    destinationMessage,
+                    "Choose Flight Destination",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, globeImage);
+
+            if (flightSearchPane == JOptionPane.OK_OPTION) {
+                searchFlight(chosenDestination);
+            }
+        }
+    }
+
+    public void searchFlight(String destination) {
+        ListOfFlights destinationFlights = allListOfFlights.searchFlight(destination);
+        int numberOfFlights = destinationFlights.size();
+        flightListNames.clear();
+        for (int s = 0; s < numberOfFlights; s++) {
+            Flight f = destinationFlights.get(s);
+            String searchedFlight = f.getName();
+            flightListNames.addElement(searchedFlight);
+            list.setEnabled(true);
+            list.setVisible(true);
+        }
+    }
+
     // EFFECTS: when save button is chosen, saves all list of flights into JSON file
     public class SaveListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            ImageIcon folderImage = new ImageIcon("data/folder.png");
+            Image newFolder = folderImage.getImage();
+            Image newImage = newFolder.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
+            folderImage = new ImageIcon(newImage);
+
             try {
                 jsonWriter.open();
                 jsonWriter.write(allListOfFlights);
                 jsonWriter.close();
                 JOptionPane.showMessageDialog(frame, "Saved " + allListOfFlights.getName() + " to"
                                 + JSON_STORE, "Save Successfully Completed",
-                        JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.INFORMATION_MESSAGE, folderImage);
             } catch (FileNotFoundException f) {
                 JOptionPane.showMessageDialog(frame, "Unable to write to the file: " + JSON_STORE, "Save Error",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -159,11 +233,15 @@ public class AirlineGUI extends JPanel
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            ImageIcon loadIcon = new ImageIcon("data/planeload.jpeg");
+            Image newLoad = loadIcon.getImage();
+            Image scaledLoad = newLoad.getScaledInstance(165, 170, Image.SCALE_SMOOTH);
+            loadIcon = new ImageIcon(scaledLoad);
             try {
                 allListOfFlights = jsonReader.read();
                 JOptionPane.showMessageDialog(frame,
                         "Loaded " + allListOfFlights.getName() + " from" + JSON_STORE, "Loaded File",
-                        JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.INFORMATION_MESSAGE, loadIcon);
             } catch (IOException i) {
                 JOptionPane.showMessageDialog(frame,
                         "Unable to read from the file: " + JSON_STORE, "Load Error",
@@ -233,25 +311,37 @@ public class AirlineGUI extends JPanel
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            try {
+                int flightNamePane = JOptionPane.showConfirmDialog(null,
+                        message,
+                        "Enter Flight Information",
+                        JOptionPane.OK_CANCEL_OPTION);
 
-            int flightNamePane = JOptionPane.showConfirmDialog(null,
-                    message,
-                    "Enter Flight Information",
-                    JOptionPane.OK_CANCEL_OPTION);
+                String nameInput = nameField.getText();
+                String numInput = numField.getText();
+                String destinationInput = (String) destinationSpinner.getValue();
+                Double durationInput = Double.parseDouble(durationField.getText());
+                String dateInput = dateField.getText();
+                String timeInput = timeField.getText();
+                Integer maxSeatInput = Integer.parseInt(maxSeatField.getText());
 
-            String nameInput = nameField.getText();
-            String numInput = numField.getText();
-            String destinationInput = (String) destinationSpinner.getValue();
-            Double durationInput = Double.parseDouble(durationField.getText());
-            String dateInput = dateField.getText();
-            String timeInput = timeField.getText();
-            Integer maxSeatInput = Integer.parseInt(maxSeatField.getText());
+                if (flightNamePane == JOptionPane.OK_OPTION) {
+                    createNewFlight(nameInput, numInput, destinationInput, durationInput, dateInput, timeInput,
+                            maxSeatInput);
+                } else if (flightNamePane == JOptionPane.CANCEL_OPTION) {
+                    System.out.println("Cancelled");
+                }
 
-            if (flightNamePane == JOptionPane.OK_OPTION) {
-                createNewFlight(nameInput, numInput, destinationInput, durationInput, dateInput, timeInput,
-                        maxSeatInput);
-            } else if (flightNamePane == JOptionPane.CANCEL_OPTION) {
-                System.out.println("Cancelled");
+                if (nameInput.isEmpty() || numInput.isEmpty() || destinationInput.isEmpty()
+                        || dateInput.isEmpty() || timeInput.isEmpty()
+                        || durationInput.equals(null) || maxSeatInput.equals(null)) {
+                    JOptionPane.showMessageDialog(null, "Please Enter Missing Values in Fields",
+                            "Invalid Fields", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException n) {
+                JOptionPane.showMessageDialog(null, "Please Enter a Double Value for the"
+                                + " Duration Field and an Integer for Max Seats",
+                        "Invalid Fields", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -289,17 +379,6 @@ public class AirlineGUI extends JPanel
         return destinationStrings;
     }
 
-    public JFormattedTextField getTextField(JSpinner spinner) {
-        JComponent editor = spinner.getEditor();
-        if (editor instanceof JSpinner.DefaultEditor) {
-            return ((JSpinner.DefaultEditor) editor).getTextField();
-        } else {
-            System.err.println("Unexpected editor type: "
-                    + spinner.getEditor().getClass()
-                    + " isn't a descendant of DefaultEditor");
-            return null;
-        }
-    }
 
     // EFFECTS: when view button is chosen, displays all information of single flight chosen
     public class ViewListener implements ActionListener {
@@ -323,6 +402,9 @@ public class AirlineGUI extends JPanel
                     + "Maximum Number of Seats: " + viewFlight.getMaxSeats();
 
             ImageIcon message = new ImageIcon("data/plane.jpeg");
+            Image newMessage = message.getImage();
+            Image newImage = newMessage.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
+            message = new ImageIcon(newImage);
 
             JOptionPane.showMessageDialog(frame, flightDetails, "Flight Details of " + viewFlight.getName(),
                     JOptionPane.INFORMATION_MESSAGE, message);

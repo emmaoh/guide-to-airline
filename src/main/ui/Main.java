@@ -1,6 +1,7 @@
 package ui;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main extends JFrame {
     private static final int frameWidth = 400;
@@ -26,6 +27,9 @@ public class Main extends JFrame {
         frame.pack();
         frame.setVisible(true);
         frame.setSize(600,600);
+        newContentPane.setBackground(new Color(150, 204,255));
+
+
 
 
 //            javax.swing.SwingUtilities.invokeLater(new Runnable() {
