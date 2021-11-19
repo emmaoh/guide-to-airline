@@ -14,17 +14,21 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
 // Airline Schedule Guide Graphical Application
-public class AirlineGUI extends JPanel
+public class AirlineGUI extends JFrame
         implements ListSelectionListener {
     private JList list;
     private DefaultListModel flightListNames;
     private ListOfFlights allListOfFlights;
     private Flight viewFlight;
+
+    private JDesktopPane airlineDesktop;
+    private JPanel buttonPanel;
 
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -57,25 +61,48 @@ public class AirlineGUI extends JPanel
     // MODIFIES: this
     // EFFECTS: initializes the Airline application
     public AirlineGUI() {
+        // exit on application by default
+
+
         flightListNames = new DefaultListModel();
         allListOfFlights = new ListOfFlights("New Scheduled Flights");
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
 
+        JPanel buttonPanel = new JPanel();
+        JPanel scrollPanel = new JPanel();
+        scrollPanel.setSize(100,250);
+
 
         initializeButtons();
-        addScrollPane();
-        addButtonPanel();
+        addScrollPane(scrollPanel);
+        addButtonPanel(buttonPanel);
+
+        JFrame frame = new JFrame(); // create frame
+        frame.setSize(400, 400); // set frame width and length
+        frame.setTitle("Emma's Travel Guide to Airlines");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setSize(600,600);
+        frame.add(buttonPanel, BorderLayout.EAST);
+        frame.add(scrollPanel, BorderLayout.WEST);
+        frame.getContentPane().setBackground(new Color(150, 204,255));
     }
 
 
+
+
     // EFFECTS: creates a list and puts it in a scroll pane for display
-    public void addScrollPane() {
+    public void addScrollPane(JPanel scrollPanel) {
         list = new JList(flightListNames);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         list.addListSelectionListener(this);
         list.setVisibleRowCount(10);
+        JScrollPane listScrollPane = new JScrollPane(list);
+
+        scrollPanel.add(listScrollPane, BorderLayout.CENTER);
     }
 
     // EFFECTS: initializes JButtons for each task and corresponds it to a Listener
@@ -120,8 +147,9 @@ public class AirlineGUI extends JPanel
 
 
     // EFFECTS: adds all the buttons for tasks into one JPanel
+
     @SuppressWarnings("methodlength")
-    public void addButtonPanel() {
+    public void addButtonPanel(JPanel buttonPanel) {
         ImageIcon blueIcon = new ImageIcon("data/blue.png");
         Image newBlue = blueIcon.getImage();
         Image scaledBlue = newBlue.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
@@ -129,7 +157,6 @@ public class AirlineGUI extends JPanel
         JLabel blueLabel = new JLabel(blueIcon);
         blueLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JPanel buttonPanel = new JPanel();
         buttonPanel.add(blueLabel);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setBackground(Color.WHITE);
@@ -142,14 +169,11 @@ public class AirlineGUI extends JPanel
         buttonPanel.add(searchButton);
         buttonPanel.add(Box.createHorizontalStrut(5));
         buttonPanel.add(new JSeparator((SwingConstants.VERTICAL)));
-        buttonPanel.add(Box.createHorizontalStrut(5));
+        buttonPanel.add(Box.createVerticalStrut(30));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        JScrollPane listScrollPane = new JScrollPane(list);
-
-        add(listScrollPane, BorderLayout.EAST);
-        add(buttonPanel, BorderLayout.WEST);
     }
+
+
 
     // EFFECTS: when print button is chosen, displays all list of flights in schedule
     public class PrintListener implements ActionListener {
