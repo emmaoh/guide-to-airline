@@ -238,9 +238,9 @@ public class AirlineGUI extends JFrame
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: Prompts user to pick a certain destination and displays flights available when search button chosen
     public class SearchListener implements ActionListener {
-
         String[] destinationStrings = getDestinationStrings();
         JSpinner destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
 
@@ -278,7 +278,8 @@ public class AirlineGUI extends JFrame
         }
     }
 
-    // EFFECTS: when save button is chosen, saves all list of flights into JSON file
+    // MODIFIES: this
+    // EFFECTS: when save button is chosen, saves all list of flights into JSON file. throws exception if save error
     public class SaveListener implements ActionListener {
 
         @Override
@@ -302,7 +303,8 @@ public class AirlineGUI extends JFrame
         }
     }
 
-    // EFFECTS: when load button is chosen, loads all list of flights from JSON file
+    // MODIFIES: this
+    // EFFECTS: when load button is chosen, loads all list of flights from JSON file, throws exception if load error
     public class LoadListener implements ActionListener {
 
         @Override
@@ -383,6 +385,7 @@ public class AirlineGUI extends JFrame
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: creates JOptionPane to input info on a new flight to add and calls response to "Ok" button
     public void addOptionsPage(JTextField nameField, JTextField numField, JSpinner destinationSpinner,
                                JTextField durationField, JTextField dateField, JTextField timeField,
@@ -406,7 +409,7 @@ public class AirlineGUI extends JFrame
 
 
     // EFFECTS: creates a new flight given by inputted text fields if not empty. throws exception if invalid input for
-    // duration and max seats fields
+    // duration and max seats fields, and creates error message if isFieldsEmpty is true
     public void respondOKOption(JTextField nameField, JTextField numField, JSpinner destinationSpinner,
                                 JTextField durationField, JTextField dateField, JTextField timeField,
                                 JTextField maxSeatField, int enterFlightInfo) {
@@ -496,6 +499,7 @@ public class AirlineGUI extends JFrame
     }
 
 
+    // MODIFIES: this
     // EFFECTS: when view button is chosen, displays all information of single flight chosen
     public class ViewListener implements ActionListener {
 
