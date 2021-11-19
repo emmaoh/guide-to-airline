@@ -21,14 +21,10 @@ import java.io.IOException;
 // Airline Schedule Guide Graphical Application
 public class AirlineGUI extends JPanel
         implements ListSelectionListener {
-    private static int frameWidth = 400;
-    private static int frameLength = 400;
     private JList list;
     private DefaultListModel flightListNames;
     private ListOfFlights allListOfFlights;
-    private Flight chosenFlight;
     private Flight viewFlight;
-    private JScrollPane listScrollPane;
 
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -41,6 +37,7 @@ public class AirlineGUI extends JPanel
     private static final String loadString = "Load Schedule of Flights";
     private static final String printString = "Print Schedule of Flights";
     private static final String searchString = "Search Flight";
+
     private JButton addButton;
     private JButton removeButton;
     private JButton viewButton;
@@ -49,10 +46,12 @@ public class AirlineGUI extends JPanel
     private JButton printButton;
     private JButton searchButton;
     private JFrame frame;
-    private JLabel flightDisplay;
-    private JOptionPane messageDisplay;
 
     private String flightDetails;
+
+    String incorrectField = "Please Enter a Double Value for the Duration Field and an Integer for Max Seats";
+    String invalidTitle = "Invalid Fields";
+    String missingField = "Please Enter Values in All Given Fields";
 
 
     // MODIFIES: this
@@ -257,16 +256,16 @@ public class AirlineGUI extends JPanel
         @Override
         public void actionPerformed(ActionEvent e) {
             int index = list.getSelectedIndex();
-            flightListNames.remove(index);
-            Flight chosenFlight = allListOfFlights.get(index);
-            allListOfFlights.removeFlight(chosenFlight);
-
-            int size = flightListNames.getSize();
+            int size = flightListNames.size();
 
             if (size == 0) {
                 removeButton.setEnabled(false);
             } else {
-                if (index == flightListNames.getSize()) {
+                flightListNames.remove(index);
+                Flight chosenFlight = allListOfFlights.get(index);
+                allListOfFlights.removeFlight(chosenFlight);
+
+                if (index == size) {
                     index--;
                 }
                 list.setSelectedIndex(index);
@@ -281,24 +280,43 @@ public class AirlineGUI extends JPanel
 
             if (list.getSelectedIndex() == -1) {
                 removeButton.setEnabled(false);
+                viewButton.setEnabled(false);
             } else {
                 removeButton.setEnabled(true);
+                viewButton.setEnabled(true);
             }
         }
     }
 
     // MODIFIES: this
     // EFFECTS: when add button is chosen, prompts user to add in a new flight with inputting fields
-    private class AddListener implements ActionListener {
-        JTextField nameField = new JTextField();
-        JTextField numField = new JTextField();
-        JTextField durationField = new JTextField();
-        JTextField dateField = new JTextField();
-        JTextField timeField = new JTextField();
-        JTextField maxSeatField = new JTextField();
-        String[] destinationStrings = getDestinationStrings();
-        JSpinner destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
+    public class AddListener implements ActionListener {
 
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JTextField nameField = new JTextField();
+            JTextField numField = new JTextField();
+            JTextField durationField = new JTextField();
+            JTextField dateField = new JTextField();
+            JTextField timeField = new JTextField();
+            JTextField maxSeatField = new JTextField();
+            String[] destinationStrings = getDestinationStrings();
+            JSpinner destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
+
+            try {
+                addOptionsPage(nameField, numField, destinationSpinner, durationField, dateField, timeField,
+                        maxSeatField);
+            } catch (NumberFormatException n) {
+                JOptionPane.showMessageDialog(null, incorrectField, invalidTitle,
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    // EFFECTS: creates JOptionPane to input info on a new flight to add
+    public void addOptionsPage(JTextField nameField, JTextField numField, JSpinner destinationSpinner,
+                               JTextField durationField, JTextField dateField, JTextField timeField,
+                               JTextField maxSeatField) {
         Object[] message = {
                 "Flight Name: ", nameField,
                 "Flight Number: ", numField,
@@ -309,41 +327,33 @@ public class AirlineGUI extends JPanel
                 "Maximum Number of Seats: ", maxSeatField
         };
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                int flightNamePane = JOptionPane.showConfirmDialog(null,
-                        message,
-                        "Enter Flight Information",
-                        JOptionPane.OK_CANCEL_OPTION);
+        int enterFlightInfo = JOptionPane.showConfirmDialog(null,
+                message, "Enter Flight Information", JOptionPane.OK_CANCEL_OPTION);
 
-                String nameInput = nameField.getText();
-                String numInput = numField.getText();
-                String destinationInput = (String) destinationSpinner.getValue();
-                Double durationInput = Double.parseDouble(durationField.getText());
-                String dateInput = dateField.getText();
-                String timeInput = timeField.getText();
-                Integer maxSeatInput = Integer.parseInt(maxSeatField.getText());
+        String name = nameField.getText();
+        String flightNumber = numField.getText();
+        String destination = (String) destinationSpinner.getValue();
+        Double duration = Double.parseDouble(durationField.getText());
+        String date = dateField.getText();
+        String time = timeField.getText();
+        Integer maxSeats = Integer.parseInt(maxSeatField.getText());
 
-                if (flightNamePane == JOptionPane.OK_OPTION) {
-                    createNewFlight(nameInput, numInput, destinationInput, durationInput, dateInput, timeInput,
-                            maxSeatInput);
-                } else if (flightNamePane == JOptionPane.CANCEL_OPTION) {
-                    System.out.println("Cancelled");
-                }
-
-                if (nameInput.isEmpty() || numInput.isEmpty() || destinationInput.isEmpty()
-                        || dateInput.isEmpty() || timeInput.isEmpty()
-                        || durationInput.equals(null) || maxSeatInput.equals(null)) {
-                    JOptionPane.showMessageDialog(null, "Please Enter Missing Values in Fields",
-                            "Invalid Fields", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException n) {
-                JOptionPane.showMessageDialog(null, "Please Enter a Double Value for the"
-                                + " Duration Field and an Integer for Max Seats",
-                        "Invalid Fields", JOptionPane.ERROR_MESSAGE);
+        if (enterFlightInfo == JOptionPane.OK_OPTION) {
+            if (isFieldsEmpty(name, flightNumber, duration, date, time, maxSeats)) {
+                JOptionPane.showMessageDialog(null, missingField, invalidTitle, JOptionPane.ERROR_MESSAGE);
+            } else {
+                createNewFlight(name, flightNumber, destination, duration, date, time, maxSeats);
             }
         }
+    }
+
+    // EFFECTS: returns true if any of JTextFields were submitted empty, false otherwise
+    public boolean isFieldsEmpty(String name, String num, Double duration, String date, String time, Integer maxSeats) {
+        if (name.isEmpty() || num.isEmpty() || duration.equals(null) || date.isEmpty() || time.isEmpty()
+                || maxSeats.equals(null)) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -386,28 +396,34 @@ public class AirlineGUI extends JPanel
         @Override
         public void actionPerformed(ActionEvent e) {
             int index = list.getSelectedIndex();
-            viewFlight = allListOfFlights.get(index);
+            int size = flightListNames.size();
 
-            if (list.getSelectedIndex() == -1) {
+            if (size == 0) {
                 viewButton.setEnabled(false);
             } else {
-                viewButton.setEnabled(true);
+                viewFlight = allListOfFlights.get(index);
+
+                flightDetails = "Flight Number: " + viewFlight.getFlightNum() + "\n"
+                        + "Flight Destination: " + viewFlight.getDestination() + "\n"
+                        + "Duration: " + viewFlight.getDuration() + " Hours" + "\n"
+                        + "Date of Departure: " + viewFlight.getDate() + "\n"
+                        + "Time of Departure: " + viewFlight.getTime() + " Hours" + "\n"
+                        + "Maximum Number of Seats: " + viewFlight.getMaxSeats();
+
+                ImageIcon message = new ImageIcon("data/plane.jpeg");
+                Image newMessage = message.getImage();
+                Image newImage = newMessage.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
+                message = new ImageIcon(newImage);
+
+                JOptionPane.showMessageDialog(frame, flightDetails, "Flight Details of " + viewFlight.getName(),
+                        JOptionPane.INFORMATION_MESSAGE, message);
+
+                if (index == size) {
+                    index--;
+
+                }
             }
 
-            flightDetails = "Flight Number: " + viewFlight.getFlightNum() + "\n"
-                    + "Flight Destination: " + viewFlight.getDestination() + "\n"
-                    + "Duration: " + viewFlight.getDuration() + " Hours" + "\n"
-                    + "Date of Departure: " + viewFlight.getDate() + "\n"
-                    + "Time of Departure: " + viewFlight.getTime() + " Hours" + "\n"
-                    + "Maximum Number of Seats: " + viewFlight.getMaxSeats();
-
-            ImageIcon message = new ImageIcon("data/plane.jpeg");
-            Image newMessage = message.getImage();
-            Image newImage = newMessage.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
-            message = new ImageIcon(newImage);
-
-            JOptionPane.showMessageDialog(frame, flightDetails, "Flight Details of " + viewFlight.getName(),
-                    JOptionPane.INFORMATION_MESSAGE, message);
         }
     }
 
