@@ -296,8 +296,8 @@ public class AirlineGUI extends JFrame
                                 + JSON_STORE, "Save Successfully Completed",
                         JOptionPane.INFORMATION_MESSAGE, folderImage);
             } catch (FileNotFoundException f) {
-                JOptionPane.showMessageDialog(frame, "Unable to write to the file: " + JSON_STORE, "Save Error",
-                        JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Unable to write to the file: " + JSON_STORE,
+                        "Save Error", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
@@ -420,8 +420,8 @@ public class AirlineGUI extends JFrame
 
         if (enterFlightInfo == JOptionPane.OK_OPTION) {
             if (isFieldsEmpty(name, flightNumber, durationString, date, time, maxSeatsString)) {
-                JOptionPane.showMessageDialog(null, missingField, invalidTitle, JOptionPane.ERROR_MESSAGE,
-                        errorImage());
+                JOptionPane.showMessageDialog(null, missingField, invalidTitle,
+                        JOptionPane.ERROR_MESSAGE, errorImage());
             } else if (!isFieldsEmpty(name, flightNumber, durationString, date, time, maxSeatsString)) {
                 try {
                     Double duration = Double.parseDouble(durationField.getText());
