@@ -22,7 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-// Airline Schedule Guide Graphical Application
+// Airline Schedule Guide Graphical User Interface
 public class AirlineGUI extends JFrame
         implements ListSelectionListener {
     private JList list;
@@ -112,7 +112,7 @@ public class AirlineGUI extends JFrame
         list.addListSelectionListener(this);
         list.setVisibleRowCount(10);
         JScrollPane listScrollPane = new JScrollPane(list);
-        listScrollPane.setPreferredSize(new Dimension(370, 230));
+        listScrollPane.setPreferredSize(new Dimension(325, 380));
         listScrollPane.setVisible(true);
 
         scrollPanel.add(listScrollPane, BorderLayout.WEST);
@@ -207,9 +207,9 @@ public class AirlineGUI extends JFrame
         buttonLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         buttonLabel.setOpaque(true);
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buttonPanel.setSize(200, 100);
         buttonPanel.setOpaque(false);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setPreferredSize(new Dimension(250,300));
 
         buttonPanel.add(buttonLabel, BorderLayout.PAGE_START);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 25)));
@@ -227,21 +227,6 @@ public class AirlineGUI extends JFrame
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(searchButton);
     }
-
-    public void addImage(JPanel imagePanel) {
-        ImageIcon blueIcon = new ImageIcon("data/blue.png");
-        Image newBlue = blueIcon.getImage();
-        Image scaledBlue = newBlue.getScaledInstance(100, 200, Image.SCALE_DEFAULT);
-        blueIcon = new ImageIcon(scaledBlue);
-        JLabel blueLabel = new JLabel(blueIcon);
-        blueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        imagePanel.add(blueLabel);
-        imagePanel.add(Box.createRigidArea(new Dimension(-80, 0)));
-        imagePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        imagePanel.setOpaque(false);
-        imagePanel.setPreferredSize(new Dimension(100, 200));
-    }
-
 
     // EFFECTS: when print button is chosen, displays all list of flights in schedule
     public class PrintListener implements ActionListener {
@@ -281,8 +266,9 @@ public class AirlineGUI extends JFrame
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: given by chosen destination by user, prompts list of flights with that specified destination
     public void searchFlight(String destination) {
-//        ListOfFlights destinationFlights = allListOfFlights.searchFlight(destination);
         int numberOfFlights = allListOfFlights.searchFlight(destination).size();
         flightListNames.clear();
         for (int s = 0; s < numberOfFlights; s++) {
