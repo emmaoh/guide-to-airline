@@ -209,7 +209,7 @@ public class AirlineGUI extends JFrame
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonPanel.setOpaque(false);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setPreferredSize(new Dimension(250,300));
+        buttonPanel.setPreferredSize(new Dimension(250, 300));
 
         buttonPanel.add(buttonLabel, BorderLayout.PAGE_START);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 25)));
