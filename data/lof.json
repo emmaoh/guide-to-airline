@@ -1,12 +1,4 @@
 {
     "name": "New Scheduled Flights",
-    "flights": [{
-        "duration": 6.5,
-        "date": "01-07-2002",
-        "flightNum": "01072002",
-        "name": "Emma2002",
-        "destination": "JFK - New York",
-        "maxSeats": 160,
-        "time": "0800"
-    }]
+    "flights": []
 }

@@ -9,12 +9,12 @@ import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -41,6 +41,9 @@ public class AirlineGUI extends JFrame
     private static final String loadString = "Load Schedule of Flights";
     private static final String printString = "Print Schedule of Flights";
     private static final String searchString = "Search Flight";
+
+    private static final int frameWidth = 800;
+    private static final int frameHeight = 600;
 
     private JButton addButton;
     private JButton removeButton;
@@ -71,7 +74,6 @@ public class AirlineGUI extends JFrame
 
         JPanel buttonPanel = new JPanel();
         JPanel scrollPanel = new JPanel();
-        scrollPanel.setSize(100,250);
 
 
         initializeButtons();
@@ -79,30 +81,42 @@ public class AirlineGUI extends JFrame
         addButtonPanel(buttonPanel);
 
         JFrame frame = new JFrame(); // create frame
-        frame.setSize(400, 400); // set frame width and length
         frame.setTitle("Emma's Travel Guide to Airlines");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(600,600);
+        frame.setResizable(false);
+        frame.setSize(frameWidth, frameHeight); // set frame width and length
         frame.add(buttonPanel, BorderLayout.EAST);
-        frame.add(scrollPanel, BorderLayout.WEST);
-        frame.getContentPane().setBackground(new Color(150, 204,255));
+        frame.add(scrollPanel, BorderLayout.CENTER);
+        frame.getContentPane().setBackground(new Color(150, 204, 255));
     }
-
-
 
 
     // EFFECTS: creates a list and puts it in a scroll pane for display
     public void addScrollPane(JPanel scrollPanel) {
+        scrollPanel.setSize(100, frameHeight);
+        scrollPanel.setOpaque(false);
+
         list = new JList(flightListNames);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         list.addListSelectionListener(this);
         list.setVisibleRowCount(10);
         JScrollPane listScrollPane = new JScrollPane(list);
+        listScrollPane.setPreferredSize(new Dimension(300, 400));
+        listScrollPane.setLocation(50, 100);
+//        listScrollPane.setLayout(null);
+        listScrollPane.setVisible(true);
 
-        scrollPanel.add(listScrollPane, BorderLayout.CENTER);
+        JLabel scrollLabel = new JLabel("Current Schedule of Flights", JLabel.CENTER);
+        scrollLabel.setFont(new Font("Monospaced", Font.ITALIC, 18));
+        scrollLabel.setForeground(Color.white);
+        scrollLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        scrollPanel.add(listScrollPane);
+        scrollPanel.add(scrollLabel);
+        scrollLabel.setLayout(new FlowLayout());
+
     }
 
     // EFFECTS: initializes JButtons for each task and corresponds it to a Listener
@@ -112,37 +126,44 @@ public class AirlineGUI extends JFrame
         removeButton.setActionCommand(removeString);
         removeButton.addActionListener(new RemoveListener());
         removeButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        removeButton.setOpaque(true);
 
         viewButton = new JButton(viewString);
         viewButton.setActionCommand(viewString);
         viewButton.addActionListener(new ViewListener());
         viewButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        viewButton.setOpaque(true);
 
         saveButton = new JButton(saveString);
         saveButton.setActionCommand(saveString);
         saveButton.addActionListener(new SaveListener());
         saveButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        saveButton.setOpaque(true);
 
         loadButton = new JButton(loadString);
         loadButton.setActionCommand(loadString);
         loadButton.addActionListener(new LoadListener());
         loadButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        loadButton.setOpaque(true);
 
         printButton = new JButton(printString);
         printButton.setActionCommand(printString);
         printButton.addActionListener(new PrintListener());
         printButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        printButton.setOpaque(true);
         ;
 
         addButton = new JButton(addString);
         addButton.setActionCommand(addString);
         addButton.addActionListener(new AddListener());
         addButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        addButton.setOpaque(true);
 
         searchButton = new JButton(searchString);
         searchButton.setActionCommand(searchString);
         searchButton.addActionListener(new SearchListener());
         searchButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        searchButton.setOpaque(true);
     }
 
 
@@ -159,20 +180,25 @@ public class AirlineGUI extends JFrame
 
         buttonPanel.add(blueLabel);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.add(viewButton);
+        buttonPanel.setBackground(new Color(200, 244, 255));
+        buttonPanel.add(viewButton, BorderLayout.CENTER);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(removeButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(saveButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(loadButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(printButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(addButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(searchButton);
         buttonPanel.add(Box.createHorizontalStrut(5));
         buttonPanel.add(new JSeparator((SwingConstants.VERTICAL)));
         buttonPanel.add(Box.createVerticalStrut(30));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
-
 
 
     // EFFECTS: when print button is chosen, displays all list of flights in schedule
@@ -327,13 +353,16 @@ public class AirlineGUI extends JFrame
             String[] destinationStrings = getDestinationStrings();
             JSpinner destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
 
-            try {
-                addOptionsPage(nameField, numField, destinationSpinner, durationField, dateField, timeField,
-                        maxSeatField);
-            } catch (NumberFormatException n) {
-                JOptionPane.showMessageDialog(null, incorrectField, invalidTitle,
-                        JOptionPane.ERROR_MESSAGE);
-            }
+            addOptionsPage(nameField, numField, destinationSpinner, durationField, dateField, timeField,
+                    maxSeatField);
+
+//            try {
+//                addOptionsPage(nameField, numField, destinationSpinner, durationField, dateField, timeField,
+//                        maxSeatField);
+//            } catch (NumberFormatException n) {
+//                JOptionPane.showMessageDialog(null, incorrectField, invalidTitle,
+//                        JOptionPane.ERROR_MESSAGE, errorImage());
+//            }
         }
     }
 
@@ -352,29 +381,85 @@ public class AirlineGUI extends JFrame
         };
 
         int enterFlightInfo = JOptionPane.showConfirmDialog(null,
-                message, "Enter Flight Information", JOptionPane.OK_CANCEL_OPTION);
+                message, "Enter Flight Information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.NO_OPTION,
+                addFlightImage());
+//
+//        try {
+            respondOKOption(nameField, numField, destinationSpinner, durationField, dateField, timeField, maxSeatField, enterFlightInfo);
+//        } catch (NumberFormatException n) {
+//            JOptionPane.showMessageDialog(null, incorrectField, invalidTitle,
+//                    JOptionPane.ERROR_MESSAGE, errorImage());
 
+
+//        String name = nameField.getText();
+//        String flightNumber = numField.getText();
+//        String destination = (String) destinationSpinner.getValue();
+//        Double duration = Double.parseDouble(durationField.getText());
+//        String date = dateField.getText();
+//        String time = timeField.getText();
+//        Integer maxSeats = Integer.parseInt(maxSeatField.getText());
+//
+//        if (enterFlightInfo == JOptionPane.OK_OPTION) {
+//            if (isFieldsEmpty(name, flightNumber, duration, date, time, maxSeats)) {
+//                JOptionPane.showMessageDialog(null, missingField, invalidTitle, JOptionPane.ERROR_MESSAGE,
+//                        errorImage());
+//            } else {
+//                createNewFlight(name, flightNumber, destination, duration, date, time, maxSeats);
+//            }
+//        }
+        }
+
+
+    public void respondOKOption(JTextField nameField, JTextField numField, JSpinner destinationSpinner,
+                                JTextField durationField, JTextField dateField, JTextField timeField,
+                                JTextField maxSeatField, int enterFlightInfo) {
         String name = nameField.getText();
         String flightNumber = numField.getText();
         String destination = (String) destinationSpinner.getValue();
-        Double duration = Double.parseDouble(durationField.getText());
+        String durationString = durationField.getText();
+        String maxSeatsString = maxSeatField.getText();
         String date = dateField.getText();
         String time = timeField.getText();
-        Integer maxSeats = Integer.parseInt(maxSeatField.getText());
 
         if (enterFlightInfo == JOptionPane.OK_OPTION) {
-            if (isFieldsEmpty(name, flightNumber, duration, date, time, maxSeats)) {
-                JOptionPane.showMessageDialog(null, missingField, invalidTitle, JOptionPane.ERROR_MESSAGE);
-            } else {
-                createNewFlight(name, flightNumber, destination, duration, date, time, maxSeats);
+            if (isFieldsEmpty(name, flightNumber, durationString, date, time, maxSeatsString)) {
+                JOptionPane.showMessageDialog(null, missingField, invalidTitle, JOptionPane.ERROR_MESSAGE,
+                        errorImage());
+            } else if (!isFieldsEmpty(name, flightNumber, durationString, date, time, maxSeatsString)) {
+                try {
+                    Double duration = Double.parseDouble(durationField.getText());
+                    Integer maxSeats = Integer.parseInt(maxSeatField.getText());
+                    createNewFlight(name, flightNumber, destination, duration, date, time, maxSeats);
+                } catch (NumberFormatException n) {
+                    JOptionPane.showMessageDialog(null, incorrectField, invalidTitle,
+                            JOptionPane.ERROR_MESSAGE, errorImage());
+                }
             }
         }
+
     }
 
+    public ImageIcon addFlightImage() {
+        ImageIcon background = new ImageIcon("data/addBackground.jpeg");
+        Image newMessage = background.getImage();
+        Image newImage = newMessage.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
+        background = new ImageIcon(newImage);
+        return background;
+    }
+
+    public ImageIcon errorImage() {
+        ImageIcon background = new ImageIcon("data/errorIcon.jpeg");
+        Image newMessage = background.getImage();
+        Image newImage = newMessage.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
+        background = new ImageIcon(newImage);
+        return background;
+    }
+
+
     // EFFECTS: returns true if any of JTextFields were submitted empty, false otherwise
-    public boolean isFieldsEmpty(String name, String num, Double duration, String date, String time, Integer maxSeats) {
-        if (name.isEmpty() || num.isEmpty() || duration.equals(null) || date.isEmpty() || time.isEmpty()
-                || maxSeats.equals(null)) {
+    public boolean isFieldsEmpty(String name, String num, String duration, String date, String time, String maxSeats) {
+        if (name.isEmpty() || num.isEmpty() || duration.isEmpty() || date.isEmpty() || time.isEmpty()
+                || maxSeats.isEmpty()) {
             return true;
         }
         return false;

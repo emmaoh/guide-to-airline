@@ -1,7 +1,6 @@
 package ui;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Main extends JFrame {
     private static final int frameWidth = 400;
