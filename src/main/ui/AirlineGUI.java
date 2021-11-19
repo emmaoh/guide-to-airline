@@ -3,6 +3,9 @@ package ui;
 // This [AirlineGUI] references code from this [ListDemo] example from Oracle - JavaTutorials
 // Link: https://docs.oracle.com/javase/tutorial/uiswing/examples/components/index.html
 
+// This [AirlineGUI] references code from this [AlarmSystem] example from CPSC210 Repository
+// Link: https://github.students.cs.ubc.ca/CPSC210/AlarmSystem.git
+
 import model.Flight;
 import model.ListOfFlights;
 import persistence.JsonReader;
@@ -23,15 +26,12 @@ import java.io.IOException;
 public class AirlineGUI extends JFrame
         implements ListSelectionListener {
     private JList list;
-    private DefaultListModel flightListNames;
+    private final DefaultListModel flightListNames;
     private ListOfFlights allListOfFlights;
     private Flight viewFlight;
 
-    private JDesktopPane airlineDesktop;
-    private JPanel buttonPanel;
-
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
+    private final JsonWriter jsonWriter;
+    private final JsonReader jsonReader;
     private static final String JSON_STORE = "./data/lof.json";
 
     private static final String addString = "Add Flight";
@@ -42,8 +42,8 @@ public class AirlineGUI extends JFrame
     private static final String printString = "Print Schedule of Flights";
     private static final String searchString = "Search Flight";
 
-    private static final int frameWidth = 800;
-    private static final int frameHeight = 600;
+    private static final int frameWidth = 650;
+    private static final int frameHeight = 500;
 
     private JButton addButton;
     private JButton removeButton;
@@ -60,21 +60,16 @@ public class AirlineGUI extends JFrame
     String invalidTitle = "Invalid Fields";
     String missingField = "Please Enter Values in All Given Fields";
 
-
     // MODIFIES: this
     // EFFECTS: initializes the Airline application
     public AirlineGUI() {
-        // exit on application by default
-
-
         flightListNames = new DefaultListModel();
         allListOfFlights = new ListOfFlights("New Scheduled Flights");
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
 
-        JPanel buttonPanel = new JPanel();
+        JPanel buttonPanel = new JPanel(new FlowLayout());
         JPanel scrollPanel = new JPanel();
-
 
         initializeButtons();
         addScrollPane(scrollPanel);
@@ -86,17 +81,30 @@ public class AirlineGUI extends JFrame
         frame.pack();
         frame.setVisible(true);
         frame.setResizable(false);
-        frame.setSize(frameWidth, frameHeight); // set frame width and length
+        frame.setSize(frameWidth, frameHeight);
         frame.add(buttonPanel, BorderLayout.EAST);
         frame.add(scrollPanel, BorderLayout.CENTER);
         frame.getContentPane().setBackground(new Color(150, 204, 255));
+
+        frame.setLocationRelativeTo(null);
+        frame.add(createHeader(), BorderLayout.PAGE_START);
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates a JLabel to add into main frame as header
+    public JLabel createHeader() {
+        JLabel mainLabel = new JLabel("Time to Schedule Flights!");
+        mainLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        mainLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        return mainLabel;
+    }
 
+    // MODIFIES: this
     // EFFECTS: creates a list and puts it in a scroll pane for display
     public void addScrollPane(JPanel scrollPanel) {
-        scrollPanel.setSize(100, frameHeight);
+        scrollPanel.setSize(100, 300);
         scrollPanel.setOpaque(false);
+        scrollPanel.setAlignmentX(SwingConstants.LEFT);
 
         list = new JList(flightListNames);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -104,61 +112,86 @@ public class AirlineGUI extends JFrame
         list.addListSelectionListener(this);
         list.setVisibleRowCount(10);
         JScrollPane listScrollPane = new JScrollPane(list);
-        listScrollPane.setPreferredSize(new Dimension(300, 400));
-        listScrollPane.setLocation(50, 100);
-//        listScrollPane.setLayout(null);
+        listScrollPane.setPreferredSize(new Dimension(370, 230));
         listScrollPane.setVisible(true);
 
-        JLabel scrollLabel = new JLabel("Current Schedule of Flights", JLabel.CENTER);
-        scrollLabel.setFont(new Font("Monospaced", Font.ITALIC, 18));
-        scrollLabel.setForeground(Color.white);
-        scrollLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        scrollPanel.add(listScrollPane);
-        scrollPanel.add(scrollLabel);
-        scrollLabel.setLayout(new FlowLayout());
-
+        scrollPanel.add(listScrollPane, BorderLayout.WEST);
     }
 
     // EFFECTS: initializes JButtons for each task and corresponds it to a Listener
-    @SuppressWarnings("methodlength")
     public void initializeButtons() {
+        removeButtonSetUp();
+        viewButtonSetUp();
+        saveButtonSetUp();
+        loadButtonSetUp();
+        printButtonSetUp();
+        addButtonSetUp();
+        searchButtonSetUp();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initializes remove button
+    public void removeButtonSetUp() {
         removeButton = new JButton(removeString);
         removeButton.setActionCommand(removeString);
         removeButton.addActionListener(new RemoveListener());
         removeButton.setBorder(BorderFactory.createRaisedBevelBorder());
         removeButton.setOpaque(true);
+    }
 
+    // MODIFIES: this
+    // EFFECTS: initializes view button
+    public void viewButtonSetUp() {
         viewButton = new JButton(viewString);
         viewButton.setActionCommand(viewString);
         viewButton.addActionListener(new ViewListener());
         viewButton.setBorder(BorderFactory.createRaisedBevelBorder());
         viewButton.setOpaque(true);
+    }
 
+    // MODIFIES: this
+    // EFFECTS: initializes save button
+    public void saveButtonSetUp() {
         saveButton = new JButton(saveString);
         saveButton.setActionCommand(saveString);
         saveButton.addActionListener(new SaveListener());
         saveButton.setBorder(BorderFactory.createRaisedBevelBorder());
         saveButton.setOpaque(true);
+    }
 
+    // MODIFIES: this
+    // EFFECTS: initializes load button
+    public void loadButtonSetUp() {
         loadButton = new JButton(loadString);
         loadButton.setActionCommand(loadString);
         loadButton.addActionListener(new LoadListener());
         loadButton.setBorder(BorderFactory.createRaisedBevelBorder());
         loadButton.setOpaque(true);
+    }
 
+    // MODIFIES: this
+    // EFFECTS: initializes print button
+    public void printButtonSetUp() {
         printButton = new JButton(printString);
         printButton.setActionCommand(printString);
         printButton.addActionListener(new PrintListener());
         printButton.setBorder(BorderFactory.createRaisedBevelBorder());
         printButton.setOpaque(true);
-        ;
+    }
 
+    // MODIFIES: this
+    // EFFECTS: initializes add button
+    public void addButtonSetUp() {
         addButton = new JButton(addString);
         addButton.setActionCommand(addString);
         addButton.addActionListener(new AddListener());
         addButton.setBorder(BorderFactory.createRaisedBevelBorder());
         addButton.setOpaque(true);
+    }
 
+    // MODIFIES: this
+    // EFFECTS: initializes search button
+    public void searchButtonSetUp() {
         searchButton = new JButton(searchString);
         searchButton.setActionCommand(searchString);
         searchButton.addActionListener(new SearchListener());
@@ -166,22 +199,21 @@ public class AirlineGUI extends JFrame
         searchButton.setOpaque(true);
     }
 
-
+    // MODIFIES: this
     // EFFECTS: adds all the buttons for tasks into one JPanel
-
-    @SuppressWarnings("methodlength")
     public void addButtonPanel(JPanel buttonPanel) {
-        ImageIcon blueIcon = new ImageIcon("data/blue.png");
-        Image newBlue = blueIcon.getImage();
-        Image scaledBlue = newBlue.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
-        blueIcon = new ImageIcon(scaledBlue);
-        JLabel blueLabel = new JLabel(blueIcon);
-        blueLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        buttonPanel.add(blueLabel);
+        JLabel buttonLabel = new JLabel("Button Menu");
+        buttonLabel.setFont(new Font("Serif", Font.ITALIC, 17));
+        buttonLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        buttonLabel.setOpaque(true);
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonPanel.setSize(200, 100);
+        buttonPanel.setOpaque(false);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBackground(new Color(200, 244, 255));
-        buttonPanel.add(viewButton, BorderLayout.CENTER);
+
+        buttonPanel.add(buttonLabel, BorderLayout.PAGE_START);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 25)));
+        buttonPanel.add(viewButton, BorderLayout.EAST);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(removeButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
@@ -194,10 +226,20 @@ public class AirlineGUI extends JFrame
         buttonPanel.add(addButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(searchButton);
-        buttonPanel.add(Box.createHorizontalStrut(5));
-        buttonPanel.add(new JSeparator((SwingConstants.VERTICAL)));
-        buttonPanel.add(Box.createVerticalStrut(30));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    }
+
+    public void addImage(JPanel imagePanel) {
+        ImageIcon blueIcon = new ImageIcon("data/blue.png");
+        Image newBlue = blueIcon.getImage();
+        Image scaledBlue = newBlue.getScaledInstance(100, 200, Image.SCALE_DEFAULT);
+        blueIcon = new ImageIcon(scaledBlue);
+        JLabel blueLabel = new JLabel(blueIcon);
+        blueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        imagePanel.add(blueLabel);
+        imagePanel.add(Box.createRigidArea(new Dimension(-80, 0)));
+        imagePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        imagePanel.setOpaque(false);
+        imagePanel.setPreferredSize(new Dimension(100, 200));
     }
 
 
@@ -216,7 +258,6 @@ public class AirlineGUI extends JFrame
 
         String[] destinationStrings = getDestinationStrings();
         JSpinner destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
-        String chosenDestination = (String) destinationSpinner.getValue();
 
         Object[] destinationMessage = {
                 "Destination ", destinationSpinner
@@ -235,21 +276,19 @@ public class AirlineGUI extends JFrame
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, globeImage);
 
             if (flightSearchPane == JOptionPane.OK_OPTION) {
-                searchFlight(chosenDestination);
+                searchFlight(destinationSpinner.getValue().toString());
             }
         }
     }
 
     public void searchFlight(String destination) {
-        ListOfFlights destinationFlights = allListOfFlights.searchFlight(destination);
-        int numberOfFlights = destinationFlights.size();
+//        ListOfFlights destinationFlights = allListOfFlights.searchFlight(destination);
+        int numberOfFlights = allListOfFlights.searchFlight(destination).size();
         flightListNames.clear();
         for (int s = 0; s < numberOfFlights; s++) {
-            Flight f = destinationFlights.get(s);
+            Flight f = allListOfFlights.searchFlight(destination).get(s);
             String searchedFlight = f.getName();
             flightListNames.addElement(searchedFlight);
-            list.setEnabled(true);
-            list.setVisible(true);
         }
     }
 
@@ -355,18 +394,10 @@ public class AirlineGUI extends JFrame
 
             addOptionsPage(nameField, numField, destinationSpinner, durationField, dateField, timeField,
                     maxSeatField);
-
-//            try {
-//                addOptionsPage(nameField, numField, destinationSpinner, durationField, dateField, timeField,
-//                        maxSeatField);
-//            } catch (NumberFormatException n) {
-//                JOptionPane.showMessageDialog(null, incorrectField, invalidTitle,
-//                        JOptionPane.ERROR_MESSAGE, errorImage());
-//            }
         }
     }
 
-    // EFFECTS: creates JOptionPane to input info on a new flight to add
+    // EFFECTS: creates JOptionPane to input info on a new flight to add and calls response to "Ok" button
     public void addOptionsPage(JTextField nameField, JTextField numField, JSpinner destinationSpinner,
                                JTextField durationField, JTextField dateField, JTextField timeField,
                                JTextField maxSeatField) {
@@ -383,39 +414,19 @@ public class AirlineGUI extends JFrame
         int enterFlightInfo = JOptionPane.showConfirmDialog(null,
                 message, "Enter Flight Information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.NO_OPTION,
                 addFlightImage());
-//
-//        try {
-            respondOKOption(nameField, numField, destinationSpinner, durationField, dateField, timeField, maxSeatField, enterFlightInfo);
-//        } catch (NumberFormatException n) {
-//            JOptionPane.showMessageDialog(null, incorrectField, invalidTitle,
-//                    JOptionPane.ERROR_MESSAGE, errorImage());
+        respondOKOption(nameField, numField, destinationSpinner, durationField, dateField, timeField, maxSeatField,
+                enterFlightInfo);
+    }
 
 
-//        String name = nameField.getText();
-//        String flightNumber = numField.getText();
-//        String destination = (String) destinationSpinner.getValue();
-//        Double duration = Double.parseDouble(durationField.getText());
-//        String date = dateField.getText();
-//        String time = timeField.getText();
-//        Integer maxSeats = Integer.parseInt(maxSeatField.getText());
-//
-//        if (enterFlightInfo == JOptionPane.OK_OPTION) {
-//            if (isFieldsEmpty(name, flightNumber, duration, date, time, maxSeats)) {
-//                JOptionPane.showMessageDialog(null, missingField, invalidTitle, JOptionPane.ERROR_MESSAGE,
-//                        errorImage());
-//            } else {
-//                createNewFlight(name, flightNumber, destination, duration, date, time, maxSeats);
-//            }
-//        }
-        }
-
-
+    // EFFECTS: creates a new flight given by inputted text fields if not empty. throws exception if invalid input for
+    // duration and max seats fields
     public void respondOKOption(JTextField nameField, JTextField numField, JSpinner destinationSpinner,
                                 JTextField durationField, JTextField dateField, JTextField timeField,
                                 JTextField maxSeatField, int enterFlightInfo) {
         String name = nameField.getText();
         String flightNumber = numField.getText();
-        String destination = (String) destinationSpinner.getValue();
+        String destination = destinationSpinner.getValue().toString();
         String durationString = durationField.getText();
         String maxSeatsString = maxSeatField.getText();
         String date = dateField.getText();
@@ -436,9 +447,10 @@ public class AirlineGUI extends JFrame
                 }
             }
         }
-
     }
 
+    // MODIFIES: this
+    // EFFECTS: returns image resized for the add flight button
     public ImageIcon addFlightImage() {
         ImageIcon background = new ImageIcon("data/addBackground.jpeg");
         Image newMessage = background.getImage();
@@ -447,6 +459,8 @@ public class AirlineGUI extends JFrame
         return background;
     }
 
+    // MODIFIES: this
+    // EFFECTS: returns image resized for the JOption error messages
     public ImageIcon errorImage() {
         ImageIcon background = new ImageIcon("data/errorIcon.jpeg");
         Image newMessage = background.getImage();
@@ -458,11 +472,8 @@ public class AirlineGUI extends JFrame
 
     // EFFECTS: returns true if any of JTextFields were submitted empty, false otherwise
     public boolean isFieldsEmpty(String name, String num, String duration, String date, String time, String maxSeats) {
-        if (name.isEmpty() || num.isEmpty() || duration.isEmpty() || date.isEmpty() || time.isEmpty()
-                || maxSeats.isEmpty()) {
-            return true;
-        }
-        return false;
+        return name.isEmpty() || num.isEmpty() || duration.isEmpty() || date.isEmpty() || time.isEmpty()
+                || maxSeats.isEmpty();
     }
 
 
