@@ -54,7 +54,6 @@ public class AirlineGUI extends JFrame
     private JButton viewButton;
     private JButton saveButton;
     private JButton loadButton;
-    private JButton printButton;
     private JButton searchButton;
     private JFrame frame;
 

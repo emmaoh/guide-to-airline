@@ -66,7 +66,6 @@ public class ListOfFlights implements Writable {
         return false;
     }
 
-
     // EFFECTS: returns the number of flights in list of scheduled flights
     public int size() {
         return allFlights.size();

@@ -1,4 +1,4 @@
-// This [JsnReader] references code from this [JSON-java] CPSC 210 repository
+package persistence;// This [JsnReader] references code from this [JSON-java] CPSC 210 repository
 // Link: https://github.com/stleary/JSON-java
 
 import model.Flight;
@@ -6,6 +6,7 @@ import model.ListOfFlights;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import persistence.JsonReader;
+import persistence.JsonTest;
 import persistence.JsonWriter;
 
 import java.io.IOException;

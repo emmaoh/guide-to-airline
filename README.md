@@ -87,6 +87,36 @@ Removed flight: New York New York! from List of Flights
 
 Process finished with exit code 0
 
+### Phase 4: Task 3
+
+**UML Class Diagram - Project Design Reflection**
+
+<p> If I had more time to work on this project, I would refactor my GUI class mainly. Within my Airline GUI class, I 
+have incorporated all code from setting up a JFrame to methods on all actions that are controlled through the user, with 
+inner classes within the class itself as well. What I have thought about doing in order to improve the design of my 
+project is to either: 
+
+1. Divide into two sub-classes, one where the class is responsible for the design of my project. This ranges from color,
+adding panels, buttons, frame and all the aspects of adding specific aesthetic features. The second class would be 
+responsible for control. Meaning, it would include such code for action listeners, like what the program will do when
+a certain button is clicked, whether that is adding a flight or removing a flight to/from a list of flights 
+(for example).
+
+2. Create an abstract class, which could be called "Tools", for example. Therefore, for each user story - add, remove,
+view, search, save, load all flights will have its own class. Each of the classes will extend this "Tools" abstract 
+class (like AddTool), and be responsible within its own class how it would behave in the case of where the user clicks
+its corresponding button. The Airline GUI and Main class within the UI package of my project would still exist and be 
+responsible for instantiating the graphical interface, and designing the components within the window.
+
+
+In these cases, it would be beneficial in such ways:
+
+- Clearer to the eye - design. It'll appear aesthetically clear in the structure of my project, 
+since each class is responsible for its own task for the GUI when prompted by the user.
+
+- Easier to debug. Since rather than having all the code for the entire GUI in one class basically, in this case 
+since it is all divided to its own classes, it will be a lot easier to catch errors and debug code as each class itself
+will be designated to a specific "duty".</p>
 
 
  
