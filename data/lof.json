@@ -2,31 +2,22 @@
     "name": "New Scheduled Flights",
     "flights": [
         {
-            "duration": 2,
-            "date": "edmund",
+            "duration": 6.5,
+            "date": "12-21-21",
+            "flightNum": "emma2002",
+            "name": "Emma",
+            "destination": "JFK - New York",
+            "maxSeats": 144,
+            "time": "0800"
+        },
+        {
+            "duration": 10,
+            "date": "12-15-21",
             "flightNum": "edmund",
-            "name": "edmund",
-            "destination": "HNL - Honolulu",
-            "maxSeats": 2,
-            "time": "edmund"
-        },
-        {
-            "duration": 2,
-            "date": "emma",
-            "flightNum": "emma",
-            "name": "emma",
-            "destination": "HNL - Honolulu",
-            "maxSeats": 2,
-            "time": "emma"
-        },
-        {
-            "duration": 5,
-            "date": "brian",
-            "flightNum": "brian",
-            "name": "brian",
-            "destination": "YYZ - Toronto",
-            "maxSeats": 5,
-            "time": "brian"
+            "name": "Ed",
+            "destination": "LHR - London",
+            "maxSeats": 180,
+            "time": "1430"
         }
     ]
 }

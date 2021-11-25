@@ -6,6 +6,8 @@ package ui;
 // This [AirlineGUI] references code from this [AlarmSystem] example from CPSC210 Repository
 // Link: https://github.students.cs.ubc.ca/CPSC210/AlarmSystem.git
 
+import model.Event;
+import model.EventLog;
 import model.Flight;
 import model.ListOfFlights;
 import persistence.JsonReader;
@@ -18,6 +20,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -74,10 +78,11 @@ public class AirlineGUI extends JFrame
         initializeButtons();
         addScrollPane(scrollPanel);
         addButtonPanel(buttonPanel);
-
         JFrame frame = new JFrame(); // create frame
         frame.setTitle("Emma's Travel Guide to Airlines");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.addWindowListener(new CloseWindowAction());
+
         frame.pack();
         frame.setVisible(true);
         frame.setResizable(false);
@@ -88,6 +93,16 @@ public class AirlineGUI extends JFrame
 
         frame.setLocationRelativeTo(null);
         frame.add(createHeader(), BorderLayout.PAGE_START);
+    }
+
+    // EFFECTS: when window is prompted to close, prints out event log on console of history when application used
+    private class CloseWindowAction extends WindowAdapter {
+        public void windowClosing(WindowEvent e) {
+            super.windowClosing(e);
+            for (Event nextEvent : EventLog.getInstance()) {
+                System.out.println(nextEvent.toString());
+            }
+        }
     }
 
     // MODIFIES: this
@@ -124,7 +139,6 @@ public class AirlineGUI extends JFrame
         viewButtonSetUp();
         saveButtonSetUp();
         loadButtonSetUp();
-        printButtonSetUp();
         addButtonSetUp();
         searchButtonSetUp();
     }
@@ -170,16 +184,6 @@ public class AirlineGUI extends JFrame
     }
 
     // MODIFIES: this
-    // EFFECTS: initializes print button
-    public void printButtonSetUp() {
-        printButton = new JButton(printString);
-        printButton.setActionCommand(printString);
-        printButton.addActionListener(new PrintListener());
-        printButton.setBorder(BorderFactory.createRaisedBevelBorder());
-        printButton.setOpaque(true);
-    }
-
-    // MODIFIES: this
     // EFFECTS: initializes add button
     public void addButtonSetUp() {
         addButton = new JButton(addString);
@@ -221,26 +225,14 @@ public class AirlineGUI extends JFrame
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(loadButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
-        buttonPanel.add(printButton);
-        buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(addButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 18)));
         buttonPanel.add(searchButton);
     }
 
-    // EFFECTS: when print button is chosen, displays all list of flights in schedule
-    public class PrintListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            for (Flight f : allListOfFlights.getAllFlights()) {
-                flightListNames.addElement(f.getName());
-            }
-        }
-    }
-
     // MODIFIES: this
     // EFFECTS: Prompts user to pick a certain destination and displays flights available when search button chosen
-    public class SearchListener implements ActionListener {
+    private class SearchListener implements ActionListener {
         String[] destinationStrings = getDestinationStrings();
         JSpinner destinationSpinner = new JSpinner(new SpinnerListModel(destinationStrings));
 
@@ -267,20 +259,37 @@ public class AirlineGUI extends JFrame
     }
 
     // MODIFIES: this
-    // EFFECTS: given by chosen destination by user, prompts list of flights with that specified destination
+    // EFFECTS: given by chosen destination by user, prompts list of flights with that specified destination. if no
+    // such flight exists, prompts an information message
     public void searchFlight(String destination) {
         int numberOfFlights = allListOfFlights.searchFlight(destination).size();
-        flightListNames.clear();
-        for (int s = 0; s < numberOfFlights; s++) {
-            Flight f = allListOfFlights.searchFlight(destination).get(s);
-            String searchedFlight = f.getName();
-            flightListNames.addElement(searchedFlight);
+        if (allListOfFlights.containsDestination(destination)) {
+            flightListNames.clear();
+            for (int s = 0; s < numberOfFlights; s++) {
+                Flight f = allListOfFlights.searchFlight(destination).get(s);
+                String searchedFlight = f.getName();
+                flightListNames.addElement(searchedFlight);
+            }
+        } else if (!allListOfFlights.containsDestination(destination)) {
+            ImageIcon sadImage = new ImageIcon("data/sadImage.png");
+            Image newSad = sadImage.getImage();
+            Image newSadImage = newSad.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
+            sadImage = new ImageIcon(newSadImage);
+
+            if (flightListNames.size() == 0) {
+                JOptionPane.showMessageDialog(frame, "Sorry, a flight with the chosen destination does not "
+                                + "exist yet!" + "\n" + "Please remember to load the flights in the schedule prior, "
+                                + "\n" + "to view all the flights that are currently available for existing "
+                                + "destinations.",
+                        "Flight Currently Does Not Exist",
+                        JOptionPane.INFORMATION_MESSAGE, sadImage);
+            }
         }
     }
 
     // MODIFIES: this
     // EFFECTS: when save button is chosen, saves all list of flights into JSON file. throws exception if save error
-    public class SaveListener implements ActionListener {
+    private class SaveListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -304,8 +313,9 @@ public class AirlineGUI extends JFrame
     }
 
     // MODIFIES: this
-    // EFFECTS: when load button is chosen, loads all list of flights from JSON file, throws exception if load error
-    public class LoadListener implements ActionListener {
+    // EFFECTS: when load button is chosen, loads all list of flights from JSON file and prints names of flights
+    // on visual scroll pane. throws exception if load error exists.
+    private class LoadListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -318,6 +328,9 @@ public class AirlineGUI extends JFrame
                 JOptionPane.showMessageDialog(frame,
                         "Loaded " + allListOfFlights.getName() + " from" + JSON_STORE, "Loaded File",
                         JOptionPane.INFORMATION_MESSAGE, loadIcon);
+                for (Flight f : allListOfFlights.getAllFlights()) {
+                    flightListNames.addElement(f.getName());
+                }
             } catch (IOException i) {
                 JOptionPane.showMessageDialog(frame,
                         "Unable to read from the file: " + JSON_STORE, "Load Error",
@@ -328,7 +341,7 @@ public class AirlineGUI extends JFrame
 
     // MODIFIES: this
     // EFFECTS: when remove button is chosen, removes chosen index of flight from display and list of flights
-    public class RemoveListener implements ActionListener {
+    private class RemoveListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -367,7 +380,7 @@ public class AirlineGUI extends JFrame
 
     // MODIFIES: this
     // EFFECTS: when add button is chosen, prompts user to add in a new flight with inputting fields
-    public class AddListener implements ActionListener {
+    private class AddListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -501,7 +514,7 @@ public class AirlineGUI extends JFrame
 
     // MODIFIES: this
     // EFFECTS: when view button is chosen, displays all information of single flight chosen
-    public class ViewListener implements ActionListener {
+    private class ViewListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -511,7 +524,11 @@ public class AirlineGUI extends JFrame
             if (size == 0) {
                 viewButton.setEnabled(false);
             } else {
-                viewFlight = allListOfFlights.get(index);
+                for (Flight f : allListOfFlights.getAllFlights()) {
+                    if (flightListNames.getElementAt(index).equals(f.getName())) {
+                        viewFlight = f;
+                    }
+                }
 
                 flightDetails = "Flight Number: " + viewFlight.getFlightNum() + "\n"
                         + "Flight Destination: " + viewFlight.getDestination() + "\n"
@@ -520,13 +537,8 @@ public class AirlineGUI extends JFrame
                         + "Time of Departure: " + viewFlight.getTime() + " Hours" + "\n"
                         + "Maximum Number of Seats: " + viewFlight.getMaxSeats();
 
-                ImageIcon message = new ImageIcon("data/plane.jpeg");
-                Image newMessage = message.getImage();
-                Image newImage = newMessage.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
-                message = new ImageIcon(newImage);
-
                 JOptionPane.showMessageDialog(frame, flightDetails, "Flight Details of " + viewFlight.getName(),
-                        JOptionPane.INFORMATION_MESSAGE, message);
+                        JOptionPane.INFORMATION_MESSAGE, viewFlightImage());
 
                 if (index == size) {
                     index--;
@@ -537,6 +549,15 @@ public class AirlineGUI extends JFrame
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: returns image resized for the viewing JOptionPane message dialog
+    public ImageIcon viewFlightImage() {
+        ImageIcon message = new ImageIcon("data/plane.jpeg");
+        Image newMessage = message.getImage();
+        Image newImage = newMessage.getScaledInstance(145, 170, Image.SCALE_SMOOTH);
+        message = new ImageIcon(newImage);
+        return message;
+    }
 }
 
 

@@ -29,6 +29,7 @@ public class ListOfFlights implements Writable {
     public void addFlight(Flight flight) {
         if (!containsFlight(flight)) {
             allFlights.add((flight));
+            EventLog.getInstance().logEvent(new Event("Added new flight: " + flight.getName()));
         }
     }
 
@@ -49,6 +50,7 @@ public class ListOfFlights implements Writable {
     public void removeFlight(Flight flight) {
         if (containsFlight(flight)) {
             allFlights.remove(flight);
+            EventLog.getInstance().logEvent(new Event("Removed flight: " + flight.getName()));
         }
     }
 
@@ -73,6 +75,8 @@ public class ListOfFlights implements Writable {
         ListOfFlights destinationList = new ListOfFlights("New List Of Flights");
         for (Flight nextDestinationFlight : allFlights) {
             if ((nextDestinationFlight.getDestination().equals(destination))) {
+                EventLog.getInstance().logEvent(new Event("Added flight: " + nextDestinationFlight.getName()
+                        + " to a new list of the given destination"));
                 destinationList.addFlight(nextDestinationFlight);
             }
         }
