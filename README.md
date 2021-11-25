@@ -48,6 +48,47 @@ date, time and maximum number of seats in the plane.
 
 8. As a user, I want to be able to view all saved flights within the list of scheduled flights that have been reloaded.
 
+### Phase 4: Task 2
+
+**Event Logging Sample**
+
+Wed Nov 24 21:16:41 PST 2021
+Added new flight: The Big Apple to List of Flights
+
+Wed Nov 24 21:16:41 PST 2021
+Added new flight: New York New York! to List of Flights
+
+Wed Nov 24 21:16:41 PST 2021
+Added new flight: Emma's Flight to List of Flights
+
+Wed Nov 24 21:16:51 PST 2021
+Removed flight: Emma's Flight from List of Flights
+
+Wed Nov 24 21:17:04 PST 2021
+Removed flight: The Big Apple from List of Flights
+
+Wed Nov 24 21:17:44 PST 2021
+Added new flight: Hello Moscow! to List of Flights
+
+Wed Nov 24 21:17:54 PST 2021
+Added new flight: New York New York! to List of Flights
+
+Wed Nov 24 21:17:54 PST 2021
+Added flight: New York New York! to a new list of the given destination
+
+Wed Nov 24 21:17:54 PST 2021
+Added new flight: New York New York! to List of Flights
+
+Wed Nov 24 21:17:54 PST 2021
+Added flight: New York New York! to a new list of the given destination
+
+Wed Nov 24 21:18:02 PST 2021
+Removed flight: New York New York! from List of Flights
+
+Process finished with exit code 0
+
+
+
  
 
 

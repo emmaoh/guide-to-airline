@@ -1,23 +1,12 @@
 {
     "name": "New Scheduled Flights",
-    "flights": [
-        {
-            "duration": 6.5,
-            "date": "12-21-21",
-            "flightNum": "emma2002",
-            "name": "Emma",
-            "destination": "JFK - New York",
-            "maxSeats": 144,
-            "time": "0800"
-        },
-        {
-            "duration": 10,
-            "date": "12-15-21",
-            "flightNum": "edmund",
-            "name": "Ed",
-            "destination": "LHR - London",
-            "maxSeats": 180,
-            "time": "1430"
-        }
-    ]
+    "flights": [{
+        "duration": 10.5,
+        "date": "12-25-21",
+        "flightNum": "MoscowFlight22",
+        "name": "Hello Moscow!",
+        "destination": "SVO - Moscow",
+        "maxSeats": 190,
+        "time": "1600"
+    }]
 }
