@@ -77,8 +77,6 @@ public class ListOfFlights implements Writable {
         for (Flight nextDestinationFlight : allFlights) {
             if ((nextDestinationFlight.getDestination().equals(destination))) {
                 destinationList.addFlight(nextDestinationFlight);
-                EventLog.getInstance().logEvent(new Event("Added flight: " + nextDestinationFlight.getName()
-                        + ": " + nextDestinationFlight + " to a new list of the given destination"));
             }
         }
         return destinationList;
