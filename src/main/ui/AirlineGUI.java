@@ -43,7 +43,6 @@ public class AirlineGUI extends JFrame
     private static final String viewString = "View Flight Details";
     private static final String saveString = "Save Schedule of Flights";
     private static final String loadString = "Load Schedule of Flights";
-    private static final String printString = "Print Schedule of Flights";
     private static final String searchString = "Search Flight";
 
     private static final int frameWidth = 650;
@@ -261,11 +260,12 @@ public class AirlineGUI extends JFrame
     // EFFECTS: given by chosen destination by user, prompts list of flights with that specified destination. if no
     // such flight exists, prompts an information message
     public void searchFlight(String destination) {
-        int numberOfFlights = allListOfFlights.searchFlight(destination).size();
+        ListOfFlights filteredList = allListOfFlights.searchFlight(destination);
+        int numberOfFlights = filteredList.size();
         if (allListOfFlights.containsDestination(destination)) {
             flightListNames.clear();
             for (int s = 0; s < numberOfFlights; s++) {
-                Flight f = allListOfFlights.searchFlight(destination).get(s);
+                Flight f = filteredList.get(s);
                 String searchedFlight = f.getName();
                 flightListNames.addElement(searchedFlight);
             }

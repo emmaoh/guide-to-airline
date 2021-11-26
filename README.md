@@ -52,38 +52,38 @@ date, time and maximum number of seats in the plane.
 
 **Event Logging Sample**
 
-Wed Nov 24 21:16:41 PST 2021
-Added new flight: The Big Apple to List of Flights
+Thu Nov 25 22:37:33 PST 2021
+Added new flight, CPSC 210: model.Flight@68a84174 to List of Flights
 
-Wed Nov 24 21:16:41 PST 2021
-Added new flight: New York New York! to List of Flights
+Thu Nov 25 22:37:33 PST 2021
+Added new flight, New York New York!: model.Flight@1d1e5e75 to List of Flights
 
-Wed Nov 24 21:16:41 PST 2021
-Added new flight: Emma's Flight to List of Flights
+Thu Nov 25 22:37:33 PST 2021
+Added new flight, Christmas Plane: model.Flight@37971f43 to List of Flights
 
-Wed Nov 24 21:16:51 PST 2021
-Removed flight: Emma's Flight from List of Flights
+Thu Nov 25 22:37:48 PST 2021
+Removed flight, Christmas Plane: model.Flight@37971f43 from List of Flights
 
-Wed Nov 24 21:17:04 PST 2021
-Removed flight: The Big Apple from List of Flights
+Thu Nov 25 22:37:50 PST 2021
+Removed flight, CPSC 210: model.Flight@68a84174 from List of Flights
 
-Wed Nov 24 21:17:44 PST 2021
-Added new flight: Hello Moscow! to List of Flights
+Thu Nov 25 22:38:15 PST 2021
+Added new flight, Emma's Plane: model.Flight@124dccbb to List of Flights
 
-Wed Nov 24 21:17:54 PST 2021
-Added new flight: New York New York! to List of Flights
+Thu Nov 25 22:38:58 PST 2021
+Added new flight, The Big Apple: model.Flight@91a6722 to List of Flights
 
-Wed Nov 24 21:17:54 PST 2021
-Added flight: New York New York! to a new list of the given destination
+Thu Nov 25 22:39:06 PST 2021
+Added new flight, New York New York!: model.Flight@1d1e5e75 to List of Flights
 
-Wed Nov 24 21:17:54 PST 2021
-Added new flight: New York New York! to List of Flights
+Thu Nov 25 22:39:06 PST 2021
+Added flight: New York New York!: model.Flight@1d1e5e75 to a new list of the given destination
 
-Wed Nov 24 21:17:54 PST 2021
-Added flight: New York New York! to a new list of the given destination
+Thu Nov 25 22:39:06 PST 2021
+Added new flight, The Big Apple: model.Flight@91a6722 to List of Flights
 
-Wed Nov 24 21:18:02 PST 2021
-Removed flight: New York New York! from List of Flights
+Thu Nov 25 22:39:06 PST 2021
+Added flight: The Big Apple: model.Flight@91a6722 to a new list of the given destination
 
 Process finished with exit code 0
 

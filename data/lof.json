@@ -1,12 +1,32 @@
 {
     "name": "New Scheduled Flights",
-    "flights": [{
-        "duration": 10.5,
-        "date": "12-25-21",
-        "flightNum": "MoscowFlight22",
-        "name": "Hello Moscow!",
-        "destination": "SVO - Moscow",
-        "maxSeats": 190,
-        "time": "1600"
-    }]
+    "flights": [
+        {
+            "duration": 6.5,
+            "date": "12-07-21",
+            "flightNum": "cpsc210flight1",
+            "name": "CPSC 210",
+            "destination": "HNL - Honolulu",
+            "maxSeats": 300,
+            "time": "1500"
+        },
+        {
+            "duration": 6.5,
+            "date": "12-25-21",
+            "flightNum": "nycplane",
+            "name": "New York New York!",
+            "destination": "JFK - New York",
+            "maxSeats": 111,
+            "time": "0900"
+        },
+        {
+            "duration": 10.5,
+            "date": "01-01-22",
+            "flightNum": "xmasplane22",
+            "name": "Christmas Plane",
+            "destination": "MXP - Milan",
+            "maxSeats": 145,
+            "time": "0600"
+        }
+    ]
 }
